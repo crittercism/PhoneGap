@@ -29,16 +29,16 @@ void Crittercism_LogUnhandledException(const char* name,
 
 - (void) crittercismLeaveBreadcrumb:(CDVInvokedUrlCommand *)command {
   [self.commandDelegate runInBackground:^{
-    NSString* breadcrumb = [command.arguments objectAtIndex:0];
+    NSString* breadcrumb = command.arguments[0];
     [Crittercism leaveBreadcrumb:breadcrumb];
   }];
 }
 
 - (void) crittercismLogHandledException:(CDVInvokedUrlCommand *)command {
   [self.commandDelegate runInBackground:^{
-    NSString* name = [command.arguments objectAtIndex:0];
-    NSString* message = [command.arguments objectAtIndex:1];
-    NSString* stack = [command.arguments objectAtIndex:2];
+    NSString* name = command.arguments[0];
+    NSString* message = command.arguments[1];
+    NSString* stack = command.arguments[2];
     stack = [self deleteStackFillerInformation:stack];
 
     const char *cName= [name UTF8String];
@@ -51,8 +51,8 @@ void Crittercism_LogUnhandledException(const char* name,
 
 - (void) crittercismLogUnhandledException:(CDVInvokedUrlCommand *)command {
   [self.commandDelegate runInBackground:^{
-    NSString* message = [command.arguments objectAtIndex:0];
-    NSString* stack = [command.arguments objectAtIndex:1];
+    NSString* message = command.arguments[0];
+    NSString* stack = command.arguments[1];
     stack = [self deleteStackFillerInformation:stack];
 
     const char *cName = "Error";
@@ -65,63 +65,36 @@ void Crittercism_LogUnhandledException(const char* name,
 
 - (void) crittercismSetUsername:(CDVInvokedUrlCommand *)command {
   [self.commandDelegate runInBackground:^{
-    NSString* username = [command.arguments objectAtIndex:0];
+    NSString* username = command.arguments[0];
     [Crittercism setUsername:username];
   }];
 }
 
 - (void) crittercismSetValueForKey:(CDVInvokedUrlCommand *)command {
   [self.commandDelegate runInBackground:^{
-    NSString* value = [command.arguments objectAtIndex:0];
-    NSString* key = [command.arguments objectAtIndex:1];
+    NSString* value = command.arguments[0];
+    NSString* key = command.arguments[1];
     [Crittercism setValue:value
                    forKey:key];
   }];
 }
 
+// Examples below
+//
+// FunctionC@file:///Users/tshi/Library/Application%20Support/iPhone%20Simulator/6.1/Applications/29A502DF-F664-434A-94C6-12AAA20BCF33/HelloWorld.app/www/js/app.js:30
+// -> FunctionC@HelloWorld.app/www/js/app.js:30
+//
+// {anonymous}("Error: Error!","file:///Users/tshi/Library/Application%20Support/iPhone%20Simulator/6.1/Applications/29A502DF-F664-434A-94C6-12AAA20BCF33/HelloWorld.app/www/js/app.js",22)
+// -> {anonymous}("Error: Error!","js/app.js",22)
+
 - (NSString*) deleteStackFillerInformation:(NSString *) stack {
-  // Ghetto way of parsing but I don't know how to get the crash identifier
-  NSString* prefix = @"file:///";
   NSString* appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
-
-  int start;
-  int end;
-  Boolean startFound = false;
-  Boolean endFound = false;
-  NSString* fillerInformation;
-
-  // Look through the stack for the fillInformation String
-  for (int i = 0; i < [stack length] && !(startFound && endFound); i++) {
-    int match = 0;
-    if(!startFound) {
-      while ([stack characterAtIndex:i] == [prefix characterAtIndex:match]) {
-        match++;
-        i++;
-
-        if (match == prefix.length) {
-          start = i - match;
-          startFound = true;
-          break;
-        }
-      }
-    } else if(!endFound){
-      while ([stack characterAtIndex:i] == [appName characterAtIndex:match]) {
-        match++;
-        i++;
-        if (match == appName.length) {
-          end = i - match - appName.length;
-          endFound = true;
-          break;
-        }
-      }
-    }
-  }
-
-  fillerInformation = [stack substringWithRange:NSMakeRange(start, end)];
-  stack = [stack stringByReplacingOccurrencesOfString:fillerInformation
-                                                         withString:@""];
-
-  return stack;
+  NSString* pattern = [NSString stringWithFormat:@"file:\/\/.*(?=%@)", appName];
+  NSError* error = NULL;
+  NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:pattern
+                                                                         options:NSRegularExpressionCaseInsensitive
+                                                                           error:&error];
+  return [regex stringByReplacingMatchesInString:stack options:0 range:NSMakeRange(0, [stack length]) withTemplate:@""];
 }
 
 @end
