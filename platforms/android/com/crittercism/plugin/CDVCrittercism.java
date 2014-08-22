@@ -80,13 +80,11 @@ public class CDVCrittercism extends CordovaPlugin {
 				});
 				return true;
 			} else if (ACTION_LOG_CRASH_EXCEPTION.equals(action)) {
-				// TODO: Remove name parameter when the jar is updated
-				final String name = "";
 				final String msg = args.getString(0);
 				final String stack = args.getString(1);
 				cordova.getThreadPool().execute(new Runnable() {
 					public void run() {
-						Crittercism._logCrashException(name, msg, stack);
+						Crittercism._logCrashException(msg, stack);
 					}
 				});
 				return true;
