@@ -72,8 +72,8 @@ void Crittercism_LogUnhandledException(const char* name,
 
 - (void) crittercismSetValueForKey:(CDVInvokedUrlCommand *)command {
   [self.commandDelegate runInBackground:^{
-    NSString* value = command.arguments[0];
-    NSString* key = command.arguments[1];
+    NSString* key = command.arguments[0];
+    NSString* value = command.arguments[1];
     [Crittercism setValue:value
                    forKey:key];
   }];

@@ -1,6 +1,6 @@
 # Cordova SDK
 
-Cordova Crittercism plugin repository. It works with cordova-3.4.0.
+The Cordova Crittercism Plugin is compatible with cordova-3.3.0 and above. For more detailed information, please visit http://docs.crittercism.com/development_platforms/phonegap.html.
 
 ## Creating a Cordova project for iOS
 
@@ -32,10 +32,7 @@ Add platforms
 
 ```
 cordova platform add ios
-cordova platform add amazon-fireos
 cordova platform add android
-cordova platform add blackberry10
-cordova platform add firefoxos
 ```
 
 ## Installation
@@ -88,4 +85,5 @@ Crittercism.leaveBreadcrumb("I am a breadcrumb");
 
 ## Sample application
 
-You can find a sample application at https://github.com/isfgjspquzml/critter_sample_app_phonegap. To use it, delete the the files in your own www/ folder and simply copy and paste the css, img, js, and index.html over.
+You can find a sample application at https://github.com/crittercism/PhoneGapExampleApp. To use it, delete the the files in your own www/ folder, copy and paste the css, img, js, and index.html over, and then rebuild your project.
+

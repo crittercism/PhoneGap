@@ -54,8 +54,8 @@ public class CDVCrittercism extends CordovaPlugin {
 				});
 				return true;
 			} else if (ACTION_SET_VALUE_FOR_KEY.equals(action)) {
-				final String value = args.getString(0);
-				final String key = args.getString(1);
+				final String key = args.getString(0);
+				final String value = args.getString(1);
 
 				cordova.getThreadPool().execute(new Runnable() {
 					public void run() {

@@ -23,8 +23,8 @@ var	Crittercism = {
 		return this;
 	},
 
-	setValueForKey: function(value, key) {
-		cordova.exec(success, fail, "CDVCrittercism", "crittercismSetValueForKey", [value, key]);
+	setValueForKey: function(key, value) {
+		cordova.exec(success, fail, "CDVCrittercism", "crittercismSetValueForKey", [key, value]);
 		return this;
 	}
 };
@@ -499,33 +499,33 @@ printStackTrace.implementation.prototype = {
 		};
 		/****** end public domain *****/
 
-		var cleanStackTrace = function(stack) {
-			var cleanStack = [];
-			var regexFilters = [/^crittercismErrorHandler/i, /^printStackTrace/i];
-			for (var i = 0, l = stack.length; i < l; i++) {
-				var line = stack[i];
+var cleanStackTrace = function(stack) {
+	var cleanStack = [];
+	var regexFilters = [/^crittercismErrorHandler/i, /^printStackTrace/i];
+	for (var i = 0, l = stack.length; i < l; i++) {
+		var line = stack[i];
 
-				var filter = false;
-				// run against regex filters, break if doesnt match
-				for (var j = 0, r = regexFilters.length; j < r; j++) {
-					if(line.match(regexFilters[j])) {
-						filter = true;
-						break;
-					}
-				}
-
-				if(!filter) {
-					cleanStack.push(line);
-				}
+		var filter = false;
+		// run against regex filters, break if doesnt match
+		for (var j = 0, r = regexFilters.length; j < r; j++) {
+			if(line.match(regexFilters[j])) {
+				filter = true;
+				break;
 			}
-
-			return cleanStack;
 		}
 
-		window.onerror = function(msg, url, line) {
-			var stack = cleanStackTrace(printStackTrace({e:msg, guess: true}));
-			stack.shift();
-			var stackAsString = stack.join("\r\n");
-
-			cordova.exec(success, fail, 'CDVCrittercism', 'crittercismLogUnhandledException', [ msg, stackAsString ]);
+		if(!filter) {
+			cleanStack.push(line);
 		}
+	}
+
+	return cleanStack;
+}
+
+window.onerror = function(msg, url, line) {
+	var stack = cleanStackTrace(printStackTrace({e:msg, guess: true}));
+	stack.shift();
+	var stackAsString = stack.join("\r\n");
+
+	cordova.exec(success, fail, 'CDVCrittercism', 'crittercismLogUnhandledException', [ msg, stackAsString ]);
+}
