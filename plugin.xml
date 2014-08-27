@@ -4,7 +4,7 @@
     xmlns:rim="http://www.blackberry.com/ns/widgets"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="com.Crittercism.PhoneGap"
-    version="1.0.0">
+    version="0.9">
 
     <name>Crittercism</name>
 
