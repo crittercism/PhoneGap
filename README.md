@@ -1,6 +1,6 @@
 # Crittercism Cordova plugin v0.9
 
-The Cordova Crittercism Plugin is compatible with cordova-3.3.0 and above. For more detailed information, please visit http://docs.crittercism.com/development_platforms/phonegap.html.
+The Cordova Crittercism Plugin is compatible with cordova-3.3.0 and above and requires jquery. For more detailed information, please visit http://docs.crittercism.com/development_platforms/phonegap.html.
 
 ## Creating a Cordova project for iOS
 
