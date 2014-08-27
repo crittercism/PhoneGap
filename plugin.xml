@@ -42,7 +42,7 @@
     		<header-file src="platforms/ios/CrittercismSDK/CRFilter.h" />
     		<header-file src="platforms/ios/CrittercismSDK/Crittercism.h" />
     		<header-file src="platforms/ios/CrittercismSDK/CrittercismDelegate.h" />
-    		<source-file src="platforms/ios/CrittercismSDK/libCrittercism_v4_3_7.a" framework="true" />
+    		<source-file src="platforms/ios/CrittercismSDK/libCrittercism_v5_0_1.a" framework="true" />
     		<source-file src="platforms/ios/CrittercismSDK/dsym_upload.sh" />
 
         <config-file target="*-Info.plist" parent="CritterAppID">
@@ -76,7 +76,7 @@
         </config-file>
 
         <!-- copy Crittercism Lib -->
-        <source-file src="platforms/android/CrittercismSDK/crittercism_TITANIUM_v5_0_0_sdkonly.jar" target-dir="libs/" framework="true" />
+        <source-file src="platforms/android/CrittercismSDK/crittercism_TITANIUM_v5_0_1_sdkonly.jar" target-dir="libs/" framework="true" />
 
         <!-- cordova plugin src files -->
         <source-file src="platforms/android/com/crittercism/plugin/CDVCrittercism.java" target-dir="src/com/crittercism/plugin/" />

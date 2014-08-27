@@ -1,5 +1,4 @@
-
-
+var VERSION = "v0.9";
 
 var exec = require("cordova/exec");
 
@@ -28,6 +27,8 @@ var	Crittercism = {
 		return this;
 	}
 };
+
+console.log("Using Crittercism Plugin " + VERSION);
 
 module.exports = Crittercism;
 

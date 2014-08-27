@@ -1,4 +1,4 @@
-# Cordova SDK
+# Crittercism Cordova plugin v0.9
 
 The Cordova Crittercism Plugin is compatible with cordova-3.3.0 and above. For more detailed information, please visit http://docs.crittercism.com/development_platforms/phonegap.html.
 
@@ -86,4 +86,3 @@ Crittercism.leaveBreadcrumb("I am a breadcrumb");
 ## Sample application
 
 You can find a sample application at https://github.com/crittercism/PhoneGapExampleApp. To use it, delete the the files in your own www/ folder, copy and paste the css, img, js, and index.html over, and then rebuild your project.
-

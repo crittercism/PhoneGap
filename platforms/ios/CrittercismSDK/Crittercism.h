@@ -172,4 +172,28 @@
 
 + (BOOL)didCrashOnLastLoad;
 
+// Init and begin a transaction with a default value.
+
++ (void)beginTransaction:(NSString *)name;
+
+// Init and begin a transaction with an input value.
+
++ (void)beginTransaction:(NSString *)name withValue:(int)value;
+
+// End an already begun transaction successfully.
+
++ (void)endTransaction:(NSString *)name;
+
+// End an already begun transaction as a failure.
+
++ (void)failTransaction:(NSString *)name;
+
+// Get the currency cents value of a transaction.
+
++ (int)valueForTransaction:(NSString*)name;
+
+// Set the currency cents value of a transaction.
+
++ (void)setValue:(int)value forTransaction:(NSString*)name;
+
 @end
