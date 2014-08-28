@@ -1,0 +1,5 @@
+Crittercism Sample Application
+===========================
+
+1) Paste the contents of this folder into your **www** folder, replacing the original cordova files
+2) Build the project with **cordova build**
