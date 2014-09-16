@@ -84,5 +84,5 @@ Crittercism.leaveBreadcrumb("I am a breadcrumb");
 
 ## Sample application
 
-You can find a sample application at https://github.com/isfgjspquzml/critter_sample_app_phonegap. To use it, delete the the files in your own www/ folder and simply copy and paste the css, img, js, and index.html over.
+You can find a sample application at https://github.com/crittercism/PhoneGapExampleApp. To use it, delete the the files in your own www/ folder and simply copy and paste the css, img, js, and index.html over.
 
