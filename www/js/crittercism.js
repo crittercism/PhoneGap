@@ -25,6 +25,18 @@ var	Crittercism = {
 	setValueForKey: function(key, value) {
 		cordova.exec(success, fail, "CDVCrittercism", "crittercismSetValueForKey", [key, value]);
 		return this;
+	},
+
+	/*
+	public static void logNetworkRequest(String method, URL url,
+			long responseTime,
+			long bytesRead, long bytesSent, int responseCode, Exception error)	*/
+	// TODO figure out what to do about error. Because it's a javascript error and we're ultimately
+	// sending an int, we probably need a table that lives here in the js and a table that lives on
+	// the server side.
+	logNetworkRequest: function(method, url, responseTime, bytesRead, bytesSent, responseCode) {
+		cordova.exec(success, fail, "CDVCrittercism", "crittercismLogNetworkRequest", [method, url, responseTime, bytesRead, bytesSent, responseCode]);
+		return this;
 	}
 };
 
