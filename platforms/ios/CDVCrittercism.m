@@ -79,6 +79,35 @@ void Crittercism_LogUnhandledException(const char* name,
   }];
 }
 
+- (void) crittercismLogNetworkRequest:(CDVInvokedUrlCommand *)command {
+  [self.commandDelegate runInBackground:^{
+    // method, url, responseTime, bytesRead, bytesSent, responseCode
+    /*
++ (BOOL)logNetworkRequest:(NSString *)method
+                      url:(NSURL *)url
+                  latency:(NSTimeInterval)latency
+                bytesRead:(NSUInteger)bytesRead
+                bytesSent:(NSUInteger)bytesSent
+             responseCode:(NSInteger)responseCode
+                    error:(NSError *)error;
+    */
+    NSString* method = command.arguments[0];
+    NSURL* url = [NSURL URLWithString:command.arguments[1]];
+    NSTimeInterval latency = [command.arguments[2] doubleValue];
+    NSUInteger bytesRead = [command.arguments[3] unsignedIntegerValue];
+    NSUInteger bytesSent = [command.arguments[4] unsignedIntegerValue];
+    NSInteger responseCode = [command.arguments[5] integerValue];
+    NSError* error = nil;
+    [Crittercism logNetworkRequest:method
+                               url:url
+                           latency:latency
+                         bytesRead:bytesRead
+                         bytesSent:bytesSent
+                      responseCode:responseCode
+                             error:error];
+  }];
+}
+
 // Examples below
 //
 // FunctionC@file:///Users/tshi/Library/Application%20Support/iPhone%20Simulator/6.1/Applications/29A502DF-F664-434A-94C6-12AAA20BCF33/HelloWorld.app/www/js/app.js:30

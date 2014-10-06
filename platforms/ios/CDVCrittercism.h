@@ -21,4 +21,6 @@
 
 - (void) crittercismSetValueForKey:(CDVInvokedUrlCommand *)command;
 
+- (void) crittercismLogNetworkRequest:(CDVInvokedUrlCommand *)command;
+
 @end
