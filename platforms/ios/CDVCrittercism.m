@@ -81,19 +81,10 @@ void Crittercism_LogUnhandledException(const char* name,
 
 - (void) crittercismLogNetworkRequest:(CDVInvokedUrlCommand *)command {
   [self.commandDelegate runInBackground:^{
-    // method, url, responseTime, bytesRead, bytesSent, responseCode
-    /*
-+ (BOOL)logNetworkRequest:(NSString *)method
-                      url:(NSURL *)url
-                  latency:(NSTimeInterval)latency
-                bytesRead:(NSUInteger)bytesRead
-                bytesSent:(NSUInteger)bytesSent
-             responseCode:(NSInteger)responseCode
-                    error:(NSError *)error;
-    */
     NSString* method = command.arguments[0];
     NSURL* url = [NSURL URLWithString:command.arguments[1]];
-    NSTimeInterval latency = [command.arguments[2] doubleValue];
+    NSUInteger latencyMillis = [command.arguments[2] unsignedLongValue];
+    NSTimeInterval latency = latencyMillis / 1000.0;
     NSUInteger bytesRead = [command.arguments[3] unsignedIntegerValue];
     NSUInteger bytesSent = [command.arguments[4] unsignedIntegerValue];
     NSInteger responseCode = [command.arguments[5] integerValue];
