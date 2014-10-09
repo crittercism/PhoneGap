@@ -1,5 +1,7 @@
 package com.crittercism.plugin;
 
+import java.net.URL;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
@@ -20,6 +22,7 @@ public class CDVCrittercism extends CordovaPlugin {
 	public static final String ACTION_SET_VALUE_FOR_KEY = "crittercismSetValueForKey";
 	public static final String ACTION_LOG_HANDLED_EXCEPTION = "crittercismLogHandledException";
 	public static final String ACTION_LOG_CRASH_EXCEPTION = "crittercismLogUnhandledException";
+	public static final String ACTION_LOG_NETWORK_REQUEST =  "crittercismLogNetworkRequest";
 
 	public static final String APPLICATION_ID = "cr_app_id";
 	public static final String STRING = "string";
@@ -85,6 +88,22 @@ public class CDVCrittercism extends CordovaPlugin {
 				cordova.getThreadPool().execute(new Runnable() {
 					public void run() {
 						Crittercism._logCrashException(msg, stack);
+					}
+				});
+				return true;
+			} else if (ACTION_LOG_NETWORK_REQUEST.equals(action)) {
+				final String method = args.getString(0);
+				final URL url = new URL(args.getString(1));
+				final long responseTime = args.getLong(2);
+				final long bytesRead = args.getLong(3);
+				final long bytesSent = args.getLong(4);
+				final int responseCode = args.getInt(5);
+				// TODO implement non-null error
+				final Exception error = null;
+				cordova.getThreadPool().execute(new Runnable() {
+					@Override
+					public void run() {
+						Crittercism.logNetworkRequest(method, url, responseTime, bytesRead, bytesSent, responseCode, error);
 					}
 				});
 				return true;

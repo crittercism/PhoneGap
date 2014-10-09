@@ -27,6 +27,11 @@ var	Crittercism = {
 	setValueForKey: function(key, value) {
 		cordova.exec(success, fail, "CDVCrittercism", "crittercismSetValueForKey", [key, value]);
 		return this;
+	},
+
+	logNetworkRequest: function(method, url, responseTime, bytesRead, bytesSent, responseCode) {
+		cordova.exec(success, fail, "CDVCrittercism", "crittercismLogNetworkRequest", [method, url, responseTime, bytesRead, bytesSent, responseCode]);
+		return this;
 	}
 };
 
