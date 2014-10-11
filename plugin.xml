@@ -4,7 +4,7 @@
     xmlns:rim="http://www.blackberry.com/ns/widgets"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="com.Crittercism.PhoneGap"
-    version="1.0.0">
+    version="1.0.1">
 
     <name>Crittercism</name>
 
@@ -49,7 +49,7 @@
             <string>$IOS_APP_ID</string>
         </config-file>
 
-        <config-file target="*-Info.plist" parent="CFBundleURLTypes">
+        <!--config-file target="*-Info.plist" parent="CFBundleURLTypes">
           <array>
             <dict>
               <key>CFBundleURLSchemes</key>
@@ -58,7 +58,7 @@
               </array>
             </dict>
           </array>
-        </config-file>
+        </config-file-->
 
     		<framework src="CoreTelephony.framework" />
         <framework src="SystemConfiguration.framework" />
