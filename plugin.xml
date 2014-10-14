@@ -39,11 +39,11 @@
         <header-file src="platforms/ios/CDVCrittercism.h" />
         <source-file src="platforms/ios/CDVCrittercism.m" />
 
-    		<header-file src="platforms/ios/CrittercismSDK/CRFilter.h" />
-    		<header-file src="platforms/ios/CrittercismSDK/Crittercism.h" />
-    		<header-file src="platforms/ios/CrittercismSDK/CrittercismDelegate.h" />
-    		<source-file src="platforms/ios/CrittercismSDK/libCrittercism_v4_3_7.a" framework="true" />
-    		<source-file src="platforms/ios/CrittercismSDK/dsym_upload.sh" />
+        <header-file src="platforms/ios/CrittercismSDK/CRFilter.h" />
+        <header-file src="platforms/ios/CrittercismSDK/Crittercism.h" />
+        <header-file src="platforms/ios/CrittercismSDK/CrittercismDelegate.h" />
+        <source-file src="platforms/ios/CrittercismSDK/libCrittercism_v4_3_7.a" framework="true" />
+        <source-file src="platforms/ios/CrittercismSDK/dsym_upload.sh" />
 
         <config-file target="*-Info.plist" parent="CritterAppID">
             <string>$IOS_APP_ID</string>
