@@ -1,3 +1,5 @@
+//  Copyright (c) 2014 Crittercism. All rights reserved.
+
 var CRITTERCISM_VERSION = "v0.9";
 
 var exec = require("cordova/exec");
@@ -24,6 +26,11 @@ var	Crittercism = {
 
 	setValueForKey: function(key, value) {
 		cordova.exec(success, fail, "CDVCrittercism", "crittercismSetValueForKey", [key, value]);
+		return this;
+	},
+
+	logNetworkRequest: function(method, url, responseTime, bytesRead, bytesSent, responseCode) {
+		cordova.exec(success, fail, "CDVCrittercism", "crittercismLogNetworkRequest", [method, url, responseTime, bytesRead, bytesSent, responseCode]);
 		return this;
 	}
 };
