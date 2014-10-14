@@ -49,17 +49,6 @@
             <string>$IOS_APP_ID</string>
         </config-file>
 
-        <!--config-file target="*-Info.plist" parent="CFBundleURLTypes">
-          <array>
-            <dict>
-              <key>CFBundleURLSchemes</key>
-              <array>
-                <string>$IOS_APP_ID</string>
-              </array>
-            </dict>
-          </array>
-        </config-file-->
-
     		<framework src="CoreTelephony.framework" />
         <framework src="SystemConfiguration.framework" />
         <framework src="libz.dylib" />
