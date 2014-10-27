@@ -98,7 +98,9 @@ public class CDVCrittercism extends CordovaPlugin {
 				final long bytesRead = args.getLong(3);
 				final long bytesSent = args.getLong(4);
 				final int responseCode = args.getInt(5);
-                final int error = args.getInt(6);
+                final int errorInt = args.getInt(6);
+                final Exception error = errorInt > 600 && errorInt < 604 ? new Exception(Integer.toString(errorInt)) : null;
+
 				cordova.getThreadPool().execute(new Runnable() {
 					@Override
 					public void run() {
