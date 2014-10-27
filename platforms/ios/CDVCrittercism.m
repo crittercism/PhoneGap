@@ -88,7 +88,7 @@ void Crittercism_LogUnhandledException(const char* name,
     NSUInteger bytesRead = [command.arguments[3] unsignedIntegerValue];
     NSUInteger bytesSent = [command.arguments[4] unsignedIntegerValue];
     NSInteger responseCode = [command.arguments[5] integerValue];
-    NSError* error = nil;
+    NSInteger error = [command.arguments[6] integerValue];
     [Crittercism logNetworkRequest:method
                                url:url
                            latency:latency

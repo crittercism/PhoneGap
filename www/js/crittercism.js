@@ -29,8 +29,8 @@ var	Crittercism = {
 		return this;
 	},
 
-	logNetworkRequest: function(method, url, responseTime, bytesRead, bytesSent, responseCode) {
-		cordova.exec(success, fail, "CDVCrittercism", "crittercismLogNetworkRequest", [method, url, responseTime, bytesRead, bytesSent, responseCode]);
+	logNetworkRequest: function(method, url, responseTime, bytesRead, bytesSent, responseCode, error) {
+		cordova.exec(success, fail, "CDVCrittercism", "crittercismLogNetworkRequest", [method, url, responseTime, bytesRead, bytesSent, responseCode, error]);
 		return this;
 	}
 };
@@ -528,7 +528,7 @@ var cleanStackTrace = function(stack) {
 	}
 
 	return cleanStack;
-}
+};
 
 window.onerror = function(msg, url, line) {
 	var stack = cleanStackTrace(printStackTrace({e:msg, guess: true}));
@@ -536,4 +536,12 @@ window.onerror = function(msg, url, line) {
 	var stackAsString = stack.join("\r\n");
 
 	cordova.exec(success, fail, 'CDVCrittercism', 'crittercismLogUnhandledException', [ msg, stackAsString ]);
-}
+};
+
+// Install service monitoring for XMLHttpRequests
+var CR_APM_UTILS=function(){var t={};t.getXMLHttpRequest=function e(){var t,e,r=[function(){return window.XMLHttpRequest},function(){return window.ActiveXObject("Msxml2.XMLHTTP")},function(){return window.ActiveXObject("Msxml3.XMLHTTP")},function(){return window.ActiveXObject("Microsoft.XMLHTTP")}];for(var s=0;s<r.length;s++){try{t=r[s]();e=new t;return t}catch(i){}}console.log("Unknown XMLHttpRequest, Crittercism service monitoring will be disabled");return null};t.dateToISOString=function r(t){function e(t){if(t<10){return"0"+t}return t}return t.getUTCFullYear()+"-"+e(t.getUTCMonth()+1)+"-"+e(t.getUTCDate())+"T"+e(t.getUTCHours())+":"+e(t.getUTCMinutes())+":"+e(t.getUTCSeconds())+"."+(t.getUTCMilliseconds()/1e3).toFixed(3).slice(2,5)+"Z"};t.getByteSize=function s(t){if(!t){return 0}if(t.byteLength){return t.byteLength}else if(t.size){return t.size}else if(t.length&&typeof t==="string"){return t.length}else{if(window.jQuery){return 0}else{return s(t.toString())}}};return t}();function installAPM(t){var e=CR_APM_UTILS.getXMLHttpRequest();e.prototype._cr_logStatsCallback=t;if(!e){window.console.log("Warning: XMLHttpRequest missing. Crittercism service monitoring will not be installed.");return}if(e.prototype._cr_saved_send){window.console.log("Warning: Crittercism service monitoring is already installed.");return}e.prototype._cr_logLatency=function r(){if(this._cr_stats&&this._cr_stats._currentTime){this._cr_stats.latency=(new Date).getTime()-this._cr_stats._currentTime;delete this._cr_stats._currentTime}};e.prototype._cr_logResponse=function s(){if(this._cr_stats){this._cr_stats.response_code=this.status;this._cr_stats.bytes_in=CR_APM_UTILS.getByteSize(this.response);this._cr_stats.time_stamp=CR_APM_UTILS.dateToISOString(new Date);this._cr_logLatency()}};e.prototype._cr_saved_open=e.prototype.open;e.prototype.open=function i(){if(!this._cr_stats){this._cr_stats={}}this._cr_saved_open.apply(this,arguments);this._cr_stats.HTTP_method=arguments[0];this._cr_stats.URL=arguments[1]};e.prototype._cr_saved_send=e.prototype.send;e.prototype.send=function n(t){if(!this._cr_stats){this._cr_stats={}}this._cr_stats._currentTime=(new Date).getTime();if(!this.onreadystatechange||!this.onreadystatechange._cr_wrapped){this._cr_saved_onreadystatechange=this.onreadystatechange;this.onreadystatechange=function e(){if(this.readyState==2||this.readyState==3){this._cr_logLatency()}if(this.readyState==4){this._cr_logResponse()}if(this._cr_saved_onreadystatechange){this._cr_saved_onreadystatechange.apply(this,arguments)}};this.onreadystatechange._cr_wrapped=true}if(!this.onprogress||!this.onprogress._cr_wrapped){this._cr_saved_onprogress=this.onprogress;this.onprogress=function(){this._cr_logLatency();if(this._cr_saved_onprogress){this._cr_saved_onprogress.apply(this,arguments)}};this.onprogress._cr_wrapped=true}if(!this.onloadend||!this.onloadend._cr_wrapped){this._cr_saved_onloadend=this.onloadend;this.onloadend=function(){this._cr_logResponse();if(this._cr_error){this._cr_stats.error=this._cr_error}this._cr_logLatency();if(this._cr_logStatsCallback){this._cr_logStatsCallback(this._cr_stats)}delete this._cr_error;delete this._cr_stats;if(this._cr_saved_onloadend){this._cr_saved_onloadend.apply(this,arguments)}};this.onloadend._cr_wrapped=true}if(!this.onerror||!this.onerror._cr_wrapped){this._cr_saved_onerror=this.onerror;this.onerror=function(t){this._cr_error=601;if(this._cr_saved_onerror){this._cr_saved_onerror.apply(this,arguments)}};this.onerror._cr_wrapped=true}if(!this.onabort||!this.onabort._cr_wrapped){this._cr_saved_onabort=this.onabort;this.onabort=function(){this._cr_error=602;if(this._cr_saved_onabort){this._cr_saved_onabort.apply(this,arguments)}};this.onabort._cr_wrapped=true}if(!this.ontimeout||!this.ontimeout._cr_wrapped){this._cr_saved_ontimeout=this.ontimeout;this.ontimeout=function(){this._cr_error=603;if(this._cr_saved_ontimeout){this._cr_saved_ontimeout.apply(this,arguments)}};this.ontimeout._cr_wrapped=true}this._cr_stats.bytes_out=CR_APM_UTILS.getByteSize(t);this._cr_saved_send.apply(this,arguments)}}
+
+// Install service monitoring callback
+installAPM(function(stats) {
+    Crittercism.logNetworkRequest(stats.HTTP_method, stats.URL, stats.latency, stats.bytes_in, stats.bytes_out, stats.response_code, stats.error);
+});
