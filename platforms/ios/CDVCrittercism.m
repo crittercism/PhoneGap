@@ -89,7 +89,7 @@ void Crittercism_LogUnhandledException(const char* name,
     NSUInteger bytesSent = [command.arguments[4] unsignedIntegerValue];
     NSInteger responseCode = [command.arguments[5] integerValue];
     NSInteger errorInt = [command.arguments[6] integerValue];
-    NSError error = [[NSError alloc] initWithDomain:@"Javascript XMLHttpRequest network error"
+    NSError error = [[NSError alloc] initWithDomain:@"JavascriptXMLHttpRequest"
                                                code:errorInt
                                            userInfo:nil];
     [Crittercism logNetworkRequest:method
