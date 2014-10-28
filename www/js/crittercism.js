@@ -1,6 +1,6 @@
 //  Copyright (c) 2014 Crittercism. All rights reserved.
 
-var CRITTERCISM_VERSION = "v0.9";
+var CRITTERCISM_VERSION = "v0.9.1";
 
 var exec = require("cordova/exec");
 
