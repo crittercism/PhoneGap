@@ -18,6 +18,8 @@ void Crittercism_LogUnhandledException(const char* name,
                                        const char *stack,
                                        int platformId);
 
+static NSString *const CRJavascriptXMLHttpRequest = @"JavascriptXMLHttpRequest";
+
 @implementation CDVCrittercism
 
 - (void)pluginInitialize
@@ -88,10 +90,17 @@ void Crittercism_LogUnhandledException(const char* name,
     NSUInteger bytesRead = [command.arguments[3] unsignedIntegerValue];
     NSUInteger bytesSent = [command.arguments[4] unsignedIntegerValue];
     NSInteger responseCode = [command.arguments[5] integerValue];
-    NSInteger errorInt = [command.arguments[6] integerValue];
-    NSError error = [[NSError alloc] initWithDomain:@"JavascriptXMLHttpRequest"
+    NSError *error;
+
+	@try {
+        NSInteger errorInt = [command.arguments[6] integerValue];
+        error = [[NSError alloc] initWithDomain:CRJavascriptXMLHttpRequest
                                                code:errorInt
                                            userInfo:nil];
+	} @catch (NSException *exception) {
+        error = nil;
+	}
+
     [Crittercism logNetworkRequest:method
                                url:url
                            latency:latency
