@@ -1,12 +1,12 @@
 //  Copyright (c) 2014 Crittercism. All rights reserved.
 
-var CRITTERCISM_VERSION = "v0.9.1";
+var CRITTERCISM_VERSION = "v2.0.0";
 
 var exec = require("cordova/exec");
 
 // You can add your custom callbacks in the functions below
-function success () {};
-function fail () {};
+function success () {}
+function fail () {}
 
 var	Crittercism = {
     leaveBreadcrumb: function(breadCrumb) {
