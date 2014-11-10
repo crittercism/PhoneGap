@@ -69,6 +69,26 @@ cordova build ios // Build for ios platform added
 
 After installing the plugin via Cordova CLI and building your project, you're all set!
 
+## Service monitoring
+
+Whenever an app makes a network call, Crittercism monitors and captures certain information. For the PhoneGap plugin, Crittercism monitors network requests for both native iOS/Android as well as for JavaScript.
+
+For JavaScript, Crittercism currently monitors XMLHttpRequests and jQuery Ajax calls and logs the following details for each request:
+
+- HTTP method
+- URL
+- Bytes in
+- Bytes out
+- Latency
+- Response code
+- Time stamp
+
+Current Limitations
+
+- jQuery $.getScript requests and requests with datatype 'jsonp' are not monitored
+- Synchronous XMLHttpRequests and jQuery ajax calls are missing latency information
+- Information on payload size is not currently collected when sending and receiving FormData and Document data types
+
 ## Using the API
 
 API calls avaliable currently include:
