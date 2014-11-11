@@ -18,33 +18,29 @@ void Crittercism_LogUnhandledException(const char* name,
                                        const char *stack,
                                        int platformId);
 
+static NSString *const CRJavascriptXMLHttpRequest = @"JavascriptXMLHttpRequest";
+
 @implementation CDVCrittercism
 
 - (void)pluginInitialize
 {
   NSString *CritterAppID = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CritterAppID"];
+  NSLog(@"Initializing Crittercism for application with app id %@", CritterAppID);
   [Crittercism enableWithAppID:CritterAppID];
-}
-
-- (void) crittercismInit:(CDVInvokedUrlCommand *)command {
-  [self.commandDelegate runInBackground:^{
-    NSString* appID = [command.arguments objectAtIndex:0];
-    [Crittercism enableWithAppID:appID];
-  }];
 }
 
 - (void) crittercismLeaveBreadcrumb:(CDVInvokedUrlCommand *)command {
   [self.commandDelegate runInBackground:^{
-    NSString* breadcrumb = [command.arguments objectAtIndex:0];
+    NSString* breadcrumb = command.arguments[0];
     [Crittercism leaveBreadcrumb:breadcrumb];
   }];
 }
 
 - (void) crittercismLogHandledException:(CDVInvokedUrlCommand *)command {
   [self.commandDelegate runInBackground:^{
-    NSString* name = [command.arguments objectAtIndex:0];
-    NSString* message = [command.arguments objectAtIndex:1];
-    NSString* stack = [command.arguments objectAtIndex:2];
+    NSString* name = command.arguments[0];
+    NSString* message = command.arguments[1];
+    NSString* stack = command.arguments[2];
     stack = [self deleteStackFillerInformation:stack];
 
     const char *cName= [name UTF8String];
@@ -57,8 +53,8 @@ void Crittercism_LogUnhandledException(const char* name,
 
 - (void) crittercismLogUnhandledException:(CDVInvokedUrlCommand *)command {
   [self.commandDelegate runInBackground:^{
-    NSString* message = [command.arguments objectAtIndex:0];
-    NSString* stack = [command.arguments objectAtIndex:1];
+    NSString* message = command.arguments[0];
+    NSString* stack = command.arguments[1];
     stack = [self deleteStackFillerInformation:stack];
 
     const char *cName = "Error";
@@ -71,44 +67,66 @@ void Crittercism_LogUnhandledException(const char* name,
 
 - (void) crittercismSetUsername:(CDVInvokedUrlCommand *)command {
   [self.commandDelegate runInBackground:^{
-    NSString* username = [command.arguments objectAtIndex:0];
+    NSString* username = command.arguments[0];
     [Crittercism setUsername:username];
   }];
 }
 
 - (void) crittercismSetValueForKey:(CDVInvokedUrlCommand *)command {
   [self.commandDelegate runInBackground:^{
-    NSString* value = [command.arguments objectAtIndex:0];
-    NSString* key = [command.arguments objectAtIndex:1];
+    NSString* key = command.arguments[0];
+    NSString* value = command.arguments[1];
     [Crittercism setValue:value
                    forKey:key];
   }];
 }
 
+- (void) crittercismLogNetworkRequest:(CDVInvokedUrlCommand *)command {
+  [self.commandDelegate runInBackground:^{
+    NSString* method = command.arguments[0];
+    NSURL* url = [NSURL URLWithString:command.arguments[1]];
+    NSUInteger latencyMillis = [command.arguments[2] unsignedLongValue];
+    NSTimeInterval latency = latencyMillis / 1000.0;
+    NSUInteger bytesRead = [command.arguments[3] unsignedIntegerValue];
+    NSUInteger bytesSent = [command.arguments[4] unsignedIntegerValue];
+    NSInteger responseCode = [command.arguments[5] integerValue];
+    NSError *error;
+
+	@try {
+        NSInteger errorInt = [command.arguments[6] integerValue];
+        error = [[NSError alloc] initWithDomain:CRJavascriptXMLHttpRequest
+                                               code:errorInt
+                                           userInfo:nil];
+	} @catch (NSException *exception) {
+        error = nil;
+	}
+
+    [Crittercism logNetworkRequest:method
+                               url:url
+                           latency:latency
+                         bytesRead:bytesRead
+                         bytesSent:bytesSent
+                      responseCode:responseCode
+                             error:error];
+  }];
+}
+
+// Examples below
+//
+// FunctionC@file:///Users/tshi/Library/Application%20Support/iPhone%20Simulator/6.1/Applications/29A502DF-F664-434A-94C6-12AAA20BCF33/HelloWorld.app/www/js/app.js:30
+// -> FunctionC@HelloWorld.app/www/js/app.js:30
+//
+// {anonymous}("Error: Error!","file:///Users/tshi/Library/Application%20Support/iPhone%20Simulator/6.1/Applications/29A502DF-F664-434A-94C6-12AAA20BCF33/HelloWorld.app/www/js/app.js",22)
+// -> {anonymous}("Error: Error!","js/app.js",22)
+
 - (NSString*) deleteStackFillerInformation:(NSString *) stack {
-  // Ghetto way of parsing but I don't know how to get the crash identifier
-  NSMutableString* mutableStack = [stack mutableCopy];
-  NSString* prefix = @"file:///var/mobile/Applications/";
-  NSString* sampleCrashIdentifier = @"2C5CAC77-9B97-463E-BF93-DC37452E2E13";
-  int prefixLength = prefix.length;
-  int sampleCrashIdentifierLength = sampleCrashIdentifier.length;
-  int fillerLength = prefixLength + sampleCrashIdentifierLength;
-
-  // Look through the stack backwards for instances of matching prefixes
-  for (int i = [mutableStack length] - sampleCrashIdentifierLength - 1; i >= 0; i--) {
-    int match = 0;
-    while ([mutableStack characterAtIndex:i] == [prefix characterAtIndex:(prefixLength - 1 - match)]) {
-      match++;
-      i--;
-    }
-
-    if (match == prefixLength) {
-      [mutableStack deleteCharactersInRange:NSMakeRange(i + 1, fillerLength)];
-      i = i - sampleCrashIdentifierLength;
-    }
-  }
-
-  return [NSString stringWithString:mutableStack];
+  NSString* appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
+  NSString* pattern = [NSString stringWithFormat:@"file:\/\/.*(?=%@)", appName];
+  NSError* error = NULL;
+  NSRegularExpression* regex = [NSRegularExpression regularExpressionWithPattern:pattern
+                                                                         options:NSRegularExpressionCaseInsensitive
+                                                                           error:&error];
+  return [regex stringByReplacingMatchesInString:stack options:0 range:NSMakeRange(0, [stack length]) withTemplate:@""];
 }
 
 @end

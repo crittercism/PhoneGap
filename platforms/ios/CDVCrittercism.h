@@ -11,8 +11,6 @@
 
 @interface CDVCrittercism : CDVPlugin
 
-- (void) crittercismInit:(CDVInvokedUrlCommand *)command;
-
 - (void) crittercismLeaveBreadcrumb:(CDVInvokedUrlCommand *)command;
 
 - (void) crittercismLogHandledException:(CDVInvokedUrlCommand *)command;
@@ -22,5 +20,7 @@
 - (void) crittercismSetUsername:(CDVInvokedUrlCommand *)command;
 
 - (void) crittercismSetValueForKey:(CDVInvokedUrlCommand *)command;
+
+- (void) crittercismLogNetworkRequest:(CDVInvokedUrlCommand *)command;
 
 @end
