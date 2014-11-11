@@ -4,7 +4,7 @@
     xmlns:rim="http://www.blackberry.com/ns/widgets"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="com.Crittercism.PhoneGap"
-    version="1.0.0">
+    version="2.0.0">
 
     <name>Crittercism</name>
 
@@ -12,9 +12,9 @@
       This plugin adds Crittercism Mobile App Performance Monitoring to your application.
     </description>
 
-    <license>Apache 2.0</license>
+    <license>http://www.crittercism.com/terms-services/</license>
 
-    <keywords>cordova,crittercism,crash,monitor,phonegap</keywords>
+    <keywords>crittercism, crash, monitor, apm, error, performance</keywords>
 
     <engines>
         <engine name="cordova" version=">=3.3.0" />
@@ -39,30 +39,17 @@
         <header-file src="platforms/ios/CDVCrittercism.h" />
         <source-file src="platforms/ios/CDVCrittercism.m" />
 
-    		<header-file src="platforms/ios/CrittercismSDK/CRFilter.h" />
-    		<header-file src="platforms/ios/CrittercismSDK/Crittercism.h" />
-    		<header-file src="platforms/ios/CrittercismSDK/CrittercismDelegate.h" />
-    		<source-file src="platforms/ios/CrittercismSDK/libCrittercism_v4_3_5.a" framework="true" />
-    		<source-file src="platforms/ios/CrittercismSDK/dsym_upload.sh" />
+        <header-file src="platforms/ios/CrittercismSDK/CRFilter.h" />
+        <header-file src="platforms/ios/CrittercismSDK/Crittercism.h" />
+        <header-file src="platforms/ios/CrittercismSDK/CrittercismDelegate.h" />
+        <source-file src="platforms/ios/CrittercismSDK/libCrittercism_v5_0_5.a" framework="true" />
+        <source-file src="platforms/ios/CrittercismSDK/dsym_upload.sh" />
 
         <config-file target="*-Info.plist" parent="CritterAppID">
             <string>$IOS_APP_ID</string>
         </config-file>
 
-        <config-file target="*-Info.plist" parent="CFBundleURLTypes">
-          <array>
-            <dict>
-              <key>CFBundleURLSchemes</key>
-              <array>
-                <string>$IOS_APP_ID</string>
-              </array>
-            </dict>
-          </array>
-        </config-file>
-
-    		<framework src="CoreTelephony.framework" />
         <framework src="SystemConfiguration.framework" />
-        <framework src="libz.dylib" />
     </platform>
 
     <!-- android -->
@@ -89,7 +76,7 @@
         </config-file>
 
         <!-- copy Crittercism Lib -->
-        <source-file src="platforms/android/CrittercismSDK/crittercism.jar" target-dir="libs/" framework="true" />
+        <source-file src="platforms/android/CrittercismSDK/crittercism_TITANIUM_v5_0_3_sdkonly.jar" target-dir="libs/" framework="true" />
 
         <!-- cordova plugin src files -->
         <source-file src="platforms/android/com/crittercism/plugin/CDVCrittercism.java" target-dir="src/com/crittercism/plugin/" />

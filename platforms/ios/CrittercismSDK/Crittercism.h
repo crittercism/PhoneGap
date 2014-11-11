@@ -113,6 +113,24 @@
 
 + (BOOL)logHandledException:(NSException *)exception;
 
+// Logging errors is a way of reporting errors your app has received.  If
+// the method is passed an NSError *error, the stack trace of the thread that
+// is logging the error will be displayed on the Crittercism web portal.
+
++ (BOOL)logError:(NSError *)error;
+
+// Logging endpoints is a way of manually logging custom network library
+// network access to URL's which fall outside Crittercism's monitoring
+// of NSURLConnection and ASIHTTPRequest method calls.
+
++ (BOOL)logNetworkRequest:(NSString *)method
+                      url:(NSURL *)url
+                  latency:(NSTimeInterval)latency
+                bytesRead:(NSUInteger)bytesRead
+                bytesSent:(NSUInteger)bytesSent
+             responseCode:(NSInteger)responseCode
+                    error:(NSError *)error;
+
 // If you wish to offer your users the ability to opt out of Crittercism
 // crash reporting, you can set the OptOutStatus to YES. If you do so, any
 // pending crash reports will be purged.
@@ -171,5 +189,29 @@
 // Did the application crash on the previous load?
 
 + (BOOL)didCrashOnLastLoad;
+
+// Init and begin a transaction with a default value.
+
++ (void)beginTransaction:(NSString *)name;
+
+// Init and begin a transaction with an input value.
+
++ (void)beginTransaction:(NSString *)name withValue:(int)value;
+
+// End an already begun transaction successfully.
+
++ (void)endTransaction:(NSString *)name;
+
+// End an already begun transaction as a failure.
+
++ (void)failTransaction:(NSString *)name;
+
+// Get the currency cents value of a transaction.
+
++ (int)valueForTransaction:(NSString*)name;
+
+// Set the currency cents value of a transaction.
+
++ (void)setValue:(int)value forTransaction:(NSString*)name;
 
 @end
