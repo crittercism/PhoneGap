@@ -111,6 +111,52 @@ static NSString *const CRJavascriptXMLHttpRequest = @"JavascriptXMLHttpRequest";
   }];
 }
 
+- (void) crittercismBeginTransaction:(CDVInvokedUrlCommand *)command {
+    [self.commandDelegate runInBackground:^{
+        NSString* transaction = command.arguments[0];
+        if ([command.arguments count] >= 2) {
+          NSInteger transactionValue = [command.arguments[1] integerValue];
+          [Crittercism beginTransaction:transaction
+                                withValue:(int)transactionValue];
+        } else {
+          [Crittercism beginTransaction:transaction];
+        }
+    }];
+}
+
+- (void) crittercismEndTransaction:(CDVInvokedUrlCommand *)command {
+    [self.commandDelegate runInBackground:^{
+        NSString* transaction = command.arguments[0];
+        [Crittercism endTransaction:transaction];
+    }];
+}
+
+- (void) crittercismFailTransaction:(CDVInvokedUrlCommand *)command {
+    [self.commandDelegate runInBackground:^{
+        NSString* transaction = command.arguments[0];
+        [Crittercism failTransaction:transaction];
+    }];
+}
+
+- (void) crittercismSetTransactionValue:(CDVInvokedUrlCommand *)command {
+    [self.commandDelegate runInBackground:^{
+        NSString* transaction = command.arguments[0];
+        NSInteger transactionValue = [command.arguments[1] integerValue];
+        [Crittercism setValue:(int)transactionValue
+               forTransaction:transaction];
+    }];
+}
+
+- (void) crittercismGetTransactionValue:(CDVInvokedUrlCommand *)command {
+        // Executing task in foreground so that call is faster given the user expects a synchronous response
+        CDVPluginResult* pluginResult = nil;
+        NSString* transaction = command.arguments[0];
+        NSInteger transactionValue = [Crittercism valueForTransaction:transaction];
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
+                                            messageAsInt:(int)transactionValue];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
 // Examples below
 //
 // FunctionC@file:///Users/tshi/Library/Application%20Support/iPhone%20Simulator/6.1/Applications/29A502DF-F664-434A-94C6-12AAA20BCF33/HelloWorld.app/www/js/app.js:30

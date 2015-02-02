@@ -4,7 +4,7 @@
     xmlns:rim="http://www.blackberry.com/ns/widgets"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="com.Crittercism.PhoneGap"
-    version="2.0.0">
+    version="3.0.0">
 
     <name>Crittercism</name>
 
@@ -41,8 +41,9 @@
 
         <header-file src="platforms/ios/CrittercismSDK/CRFilter.h" />
         <header-file src="platforms/ios/CrittercismSDK/Crittercism.h" />
+        <header-file src="platforms/ios/CrittercismSDK/CrittercismConfig.h" />
         <header-file src="platforms/ios/CrittercismSDK/CrittercismDelegate.h" />
-        <source-file src="platforms/ios/CrittercismSDK/libCrittercism_v5_0_5.a" framework="true" />
+        <source-file src="platforms/ios/CrittercismSDK/libCrittercism_v5_1_2.a" framework="true" />
         <source-file src="platforms/ios/CrittercismSDK/dsym_upload.sh" />
 
         <config-file target="*-Info.plist" parent="CritterAppID">
@@ -76,7 +77,7 @@
         </config-file>
 
         <!-- copy Crittercism Lib -->
-        <source-file src="platforms/android/CrittercismSDK/crittercism_TITANIUM_v5_0_3_sdkonly.jar" target-dir="libs/" framework="true" />
+        <source-file src="platforms/android/CrittercismSDK/crittercism_TITANIUM_v5_1_4_sdkonly.jar" target-dir="libs/" framework="true" />
 
         <!-- cordova plugin src files -->
         <source-file src="platforms/android/com/crittercism/plugin/CDVCrittercism.java" target-dir="src/com/crittercism/plugin/" />

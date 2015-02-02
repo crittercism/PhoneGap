@@ -23,4 +23,14 @@
 
 - (void) crittercismLogNetworkRequest:(CDVInvokedUrlCommand *)command;
 
+- (void) crittercismBeginTransaction:(CDVInvokedUrlCommand *)command;
+
+- (void) crittercismEndTransaction:(CDVInvokedUrlCommand *)command;
+
+- (void) crittercismFailTransaction:(CDVInvokedUrlCommand *)command;
+
+- (void) crittercismSetTransactionValue:(CDVInvokedUrlCommand *)command;
+
+- (void) crittercismGetTransactionValue:(CDVInvokedUrlCommand *)command;
+
 @end
