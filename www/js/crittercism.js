@@ -32,6 +32,47 @@ var	Crittercism = {
     logNetworkRequest: function(method, url, responseTime, bytesRead, bytesSent, responseCode, error) {
         cordova.exec(success, fail, "CDVCrittercism", "crittercismLogNetworkRequest", [method, url, responseTime, bytesRead, bytesSent, responseCode, error]);
         return this;
+    },
+
+    beginTransaction: function(transactionName, transactionValue) {
+        var args = [transactionName];
+        if (transactionValue) {
+            args.push(transactionValue);
+        }
+        cordova.exec(success, fail, "CDVCrittercism", "crittercismBeginTransaction", args);
+        return this;
+    },
+    endTransaction: function(transactionName) {
+        cordova.exec(success, fail, "CDVCrittercism", "crittercismEndTransaction", [transactionName]);
+        return this;
+    },
+
+    failTransaction: function(transactionName) {
+        cordova.exec(success, fail, "CDVCrittercism", "crittercismFailTransaction", [transactionName]);
+        return this;
+    },
+
+    setTransactionValue: function(transactionName, transactionValue) {
+        cordova.exec(success, fail, "CDVCrittercism", "crittercismSetTransactionValue", [transactionName, transactionValue]);
+        return this;
+    },
+
+    getTransactionValue: function(transactionName, callback) {
+        // cordova.exec is asynchronous so executing a callback would be most preferable but
+        // should the callback be missing, getTransactionValue will execute synchronously.
+
+        var _cr_transactionValue = null, startTime, endTime = 0;
+        cordova.exec(function (result) {
+            _cr_transactionValue = result;
+            if (callback && typeof(callback) == "function") {
+                try {
+                    callback(result);
+                } catch (exception) {}
+            }
+        }, function () {
+            // Transaction error!
+            console.log("Error getting transaction value for: " + transactionName);
+        }, "CDVCrittercism", "crittercismGetTransactionValue", [transactionName]);
     }
 };
 
