@@ -1,4 +1,4 @@
-# Crittercism Cordova plugin v2.0.0
+# Crittercism Cordova plugin v3.0.0
 
 The Cordova Crittercism Plugin is compatible with cordova-3.3.0 and above and requires jquery. For more detailed information, please visit http://docs.crittercism.com/development_platforms/phonegap.html.
 
@@ -92,6 +92,11 @@ Current Limitations
 ## Using the API
 
 API calls avaliable currently include:
+- beginTransaction("Transaction name ex. login", transactionValue) // Begins a transaction. TransactionValue is optional
+- endTransaction("Transaction name ex. login") // Ends a transaction (successful completion)
+- failTransaction("Transaction name ex. login") // Fails a transaction (unsuccessful completion)
+- getTransactionValue("Transaction name", callbackMethod(transactionValue) // Returns the value for a specific transaction to a callback method
+- setTransactionValue("Transaction name", transactionValue) // Set the value of a transaction
 - leaveBreadcrumb("Breadcrumb string") // Log step for help in debugging
 - setUserName("Username") // Create a username to look up the user
 - setValueForKey("Value", "Key") // Persist data
