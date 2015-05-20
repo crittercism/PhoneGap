@@ -68,7 +68,7 @@
             <string name="cr_app_id">$ANDROID_APP_ID</string>
         </config-file>
 
-        <config-file target="AndroidManifest.xml" parent="application">
+        <config-file target="AndroidManifest.xml" parent="/*">
             <meta-data android:name="com.crittercism.sdk.ApplicationId" android:value="@string/cr_app_id"/>
             <!-- PhoneGap adds the INTERNET permission by itself -->
             <uses-permission android:name="android.permission.READ_LOGS"/>
