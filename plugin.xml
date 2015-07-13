@@ -4,7 +4,7 @@
     xmlns:rim="http://www.blackberry.com/ns/widgets"
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="com.Crittercism.PhoneGap"
-    version="3.0.0">
+    version="3.0.1">
 
     <name>Crittercism</name>
 
@@ -43,7 +43,7 @@
         <header-file src="platforms/ios/CrittercismSDK/Crittercism.h" />
         <header-file src="platforms/ios/CrittercismSDK/CrittercismConfig.h" />
         <header-file src="platforms/ios/CrittercismSDK/CrittercismDelegate.h" />
-        <source-file src="platforms/ios/CrittercismSDK/libCrittercism_v5_1_3.a" framework="true" />
+        <source-file src="platforms/ios/CrittercismSDK/libCrittercism_v5_2_5.a" framework="true" />
         <source-file src="platforms/ios/CrittercismSDK/dsym_upload.sh" />
 
         <config-file target="*-Info.plist" parent="CritterAppID">

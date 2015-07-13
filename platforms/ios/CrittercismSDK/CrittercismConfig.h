@@ -24,20 +24,22 @@
 // Default value: YES
 @property (assign) BOOL monitorNSURLSession;
 
-// Determines whether Service Monitoring should capture network performance
-// information for network calls made through a UIWebView. Currently only page
-// loads and page transitions are captured. Calls made via javascript are currently
-// not captured.
+// Determine whether Service Monitoring should capture network performance
+// information for network calls made through a UIWebView or WKWebView. Currently
+// only page loads and page transitions are captured. Calls made via javascript
+// are currently not captured.
 //
-// The default value is "disabled" because use of the UIWebView
-// class has the side effect of calling [UIWebView initialize], which causes a
-// new thread to get spawned to manage UIWebViews. Because we cannot prevent
-// this side effect from happening, and many apps do not use web views we would
-// rather not spawn threads that you don't want. Hence this service monitoring
-// for UIWebViews must be explicitly enabled.
+// The default value is "disabled" because use of the UIWebView or WKWebView
+// class has the side effect of calling [UIWebView initialize] or
+// [WKWebView initialize], both of which create new threads to manage webviews.
+// Since Crittercism cannot prevent these side effects from happening and many
+// apps do not use webviews, service monitoring for webviews must be explicitly
+// enabled.
 //
 // Default value: NO
 @property (assign) BOOL monitorUIWebView;
+// Default value: NO
+@property (assign) BOOL monitorWKWebView;
 
 // This flag determines wither Crittercism service monitoring is enabled at all.
 // If this flag is set to NO, then no instrumentation will be installed AND
@@ -50,11 +52,11 @@
 // URLs that may contain sensitive information. These filters can also be used
 // to prevent URL query parameters from being stripped out (by default all query
 // parameters are removed before being sent to Crittercism).
-@property (nonatomic, retain) NSArray *urlFilters;
+@property (nonatomic,strong) NSArray *urlFilters;
 
 // This object provides a callback that Crittercism will use to notify an app
 // that the app crashed on the last load.
-@property (retain) id<CrittercismDelegate> delegate;
+@property (strong) id<CrittercismDelegate> delegate;
 
 // Creates a new CrittercismConfig object with the default values for the above
 // properties. You can modify the config values and pass this object into
