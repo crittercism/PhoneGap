@@ -8,6 +8,8 @@ var exec = require("cordova/exec");
 function success () {}
 function fail () {}
 
+var logUnhandledExceptionAsCrash = false;
+
 var	Crittercism = {
     leaveBreadcrumb: function(breadCrumb) {
         cordova.exec(success, fail, "CDVCrittercism", "crittercismLeaveBreadcrumb", [breadCrumb]);
@@ -61,7 +63,7 @@ var	Crittercism = {
         // cordova.exec is asynchronous so executing a callback would be most preferable but
         // should the callback be missing, getTransactionValue will execute synchronously.
 
-        var _cr_transactionValue = null, startTime, endTime = 0;
+        var _cr_transactionValue = null;
         cordova.exec(function (result) {
             _cr_transactionValue = result;
             if (callback && typeof(callback) == "function") {
@@ -73,6 +75,19 @@ var	Crittercism = {
             // Transaction error!
             console.log("Error getting transaction value for: " + transactionName);
         }, "CDVCrittercism", "crittercismGetTransactionValue", [transactionName]);
+    },
+
+    setLogUnhandledExceptionAsCrash: function(value) {
+        if ((typeof value) == 'boolean') {
+            logUnhandledExceptionAsCrash = value;
+        } else {
+            console.log("Not a boolean: " + value);
+        }
+        return this;
+    },
+
+    getLogUnhandledExceptionAsCrash: function() {
+        return logUnhandledExceptionAsCrash;
     }
 };
 
@@ -575,8 +590,11 @@ window.onerror = function(msg, url, line) {
     var stack = cleanStackTrace(printStackTrace({e:msg, guess: true}));
     stack.shift();
     var stackAsString = stack.join("\r\n");
-
-    cordova.exec(success, fail, 'CDVCrittercism', 'crittercismLogUnhandledException', [ msg, stackAsString ]);
+    if (logUnhandledExceptionAsCrash) {
+        cordova.exec(success, fail, 'CDVCrittercism', 'crittercismLogUnhandledException', [msg, stackAsString]);
+    } else {
+        cordova.exec(success, fail, 'CDVCrittercism', 'crittercismLogHandledException', ["Crash", msg, stackAsString]);
+    }
 };
 
 // Install service monitoring for XMLHttpRequests
