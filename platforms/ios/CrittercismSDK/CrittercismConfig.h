@@ -12,17 +12,24 @@
 #import <Foundation/Foundation.h>
 #import "CrittercismDelegate.h"
 
+typedef NS_ENUM(NSInteger, CRLoggingLevel) {
+  CRLoggingLevelSilent = 0,
+  CRLoggingLevelError = 1,
+  CRLoggingLevelWarning = 2,
+  CRLoggingLevelInfo = 3,
+};
+
 @interface CrittercismConfig : NSObject
 
 // Determines whether Service Monitoring should capture network performance
 // information for network calls made through NSURLConnection.
 // Default value: YES
-@property (assign) BOOL monitorNSURLConnection;
+@property (nonatomic, assign) BOOL monitorNSURLConnection;
 
 // Determines whether Service Monitoring should capture network performance
 // information for network calls made through NSURLSession.
 // Default value: YES
-@property (assign) BOOL monitorNSURLSession;
+@property (nonatomic, assign) BOOL monitorNSURLSession;
 
 // Determine whether Service Monitoring should capture network performance
 // information for network calls made through a UIWebView or WKWebView. Currently
@@ -37,26 +44,29 @@
 // enabled.
 //
 // Default value: NO
-@property (assign) BOOL monitorUIWebView;
+@property (nonatomic, assign) BOOL monitorUIWebView;
 // Default value: NO
-@property (assign) BOOL monitorWKWebView;
+@property (nonatomic, assign) BOOL monitorWKWebView;
 
 // This flag determines wither Crittercism service monitoring is enabled at all.
 // If this flag is set to NO, then no instrumentation will be installed AND
 // the thread that sends service monitoring data will be disabled.
 // Default value: YES (enabled)
-@property (assign) BOOL enableServiceMonitoring;
+@property (nonatomic, assign) BOOL enableServiceMonitoring;
+
+// This flag determines the verbosity of Crittercism log messages
+@property (nonatomic, assign) CRLoggingLevel loggingLevel;
 
 // An array of CRFilter objects. These filters are used to make it so certain
 // network performance information is not reported to Crittercism, for example
 // URLs that may contain sensitive information. These filters can also be used
 // to prevent URL query parameters from being stripped out (by default all query
 // parameters are removed before being sent to Crittercism).
-@property (nonatomic,strong) NSArray *urlFilters;
+@property (nonatomic, strong) NSArray *urlFilters;
 
 // This object provides a callback that Crittercism will use to notify an app
 // that the app crashed on the last load.
-@property (strong) id<CrittercismDelegate> delegate;
+@property (nonatomic, strong) id<CrittercismDelegate> delegate;
 
 // Creates a new CrittercismConfig object with the default values for the above
 // properties. You can modify the config values and pass this object into
