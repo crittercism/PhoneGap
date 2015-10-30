@@ -12,7 +12,7 @@
       This plugin adds Crittercism Mobile App Performance Monitoring to your application.
     </description>
 
-    <license>http://www.crittercism.com/terms-services/</license>
+    <license>http://www.apache.org/licenses/LICENSE-2.0</license>
 
     <keywords>crittercism, crash, monitor, apm, error, performance</keywords>
 
