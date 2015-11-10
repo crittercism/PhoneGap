@@ -2,7 +2,10 @@
   "name": "cordova-plugin-crittercism",
   "version": "3.0.1",
   "description": "The Crittercism plugin is available for iOS and Android.",
-  "repository": "crittercism/PhoneGap",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crittercism/PhoneGap.git"
+  }
   "keywords": [
     "cordova",
     "cordova-android",
