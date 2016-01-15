@@ -119,12 +119,14 @@ public class CDVCrittercism extends CordovaPlugin {
                 // It doesn't appear on the docs and should this be the case, we expect the
                 // error value to be an 'int' between 600 and 604 than a user supplied string.
                 final String method = args.getString(0);
-                final URL url = new URL(args.getString(1));
+                final String urlStr = args.getString(1);
                 final long responseTime = args.getLong(2);
                 final long bytesRead = args.getLong(3);
                 final long bytesSent = args.getLong(4);
                 final int responseCode = args.getInt(5);
+                final int errorCode = args.getInt(6);
 
+                /*
                 String errorString = null;
                 final Exception error;
 
@@ -150,11 +152,12 @@ public class CDVCrittercism extends CordovaPlugin {
                 } else {
                     error = null;
                 }
+                */
 
                 cordova.getThreadPool().execute(new Runnable() {
                     @Override
                     public void run() {
-                        Crittercism.logNetworkRequest(method, url, responseTime, bytesRead, bytesSent, responseCode, error);
+                        Crittercism.logNetworkRequest(method, urlStr, responseTime, bytesRead, bytesSent, responseCode, errorCode);
                     }
                 });
                 return true;
