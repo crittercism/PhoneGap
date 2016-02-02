@@ -97,17 +97,20 @@ static NSString *const CRJavascriptXMLHttpRequest = @"JavascriptXMLHttpRequest";
     NSUInteger bytesRead = [command.arguments[3] unsignedIntegerValue];
     NSUInteger bytesSent = [command.arguments[4] unsignedIntegerValue];
     NSInteger responseCode = [command.arguments[5] integerValue];
-    NSError *error;
-
-	@try {
-        NSInteger errorInt = [command.arguments[6] integerValue];
+    NSError *error = nil;
+    NSObject *errorCode =command.arguments[6];
+    if ([errorCode isKindOfClass:[NSNull class]]) {
+        // Strictly, caller should always be passing an integer errorCode,
+        // but we let errorCode = null slide without remarking.
+    } else if ([errorCode isKindOfClass:[NSNumber class]]) {
+        // Convert number to integer, even if it is float.
         error = [[NSError alloc] initWithDomain:CRJavascriptXMLHttpRequest
-                                               code:errorInt
+                                               code:[(NSNumber*)errorCode integerValue]
                                            userInfo:nil];
-	} @catch (NSException *exception) {
-        error = nil;
-	}
-
+    } else {
+        // Complain and carry on as if errorCode = 0 was passed, hence leave error = nil .
+        NSLog(@"errorCode == %@ should be an integer", errorCode);
+    }
     [Crittercism logNetworkRequest:method
                                url:url
                            latency:latency
