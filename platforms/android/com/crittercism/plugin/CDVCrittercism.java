@@ -67,152 +67,28 @@ public class CDVCrittercism extends CordovaPlugin {
                            CallbackContext callbackContext) throws JSONException {
         try {
             if (ACTION_ADD_BREADCRUMB.equals(action)) {
-                final String breadcrumb = args.getString(0);
-                Crittercism.leaveBreadcrumb(breadcrumb);
-                return true;
+                return executeLeaveBreadcrumb(action, args, callbackContext);
             } else if (ACTION_SET_USERNAME.equals(action)) {
-                final String username = args.getString(0);
-                cordova.getThreadPool().execute(new Runnable() {
-                    public void run() {
-                        Crittercism.setUsername(username);
-                    }
-                });
-                return true;
+                return executeSetUsername(action, args, callbackContext);
             } else if (ACTION_SET_VALUE_FOR_KEY.equals(action)) {
-                final String key = args.getString(0);
-                final String value = args.getString(1);
-
-                cordova.getThreadPool().execute(new Runnable() {
-                    public void run() {
-                        JSONObject metadata = new JSONObject();
-                        try {
-                            metadata.put(key, value);
-                        } catch (JSONException e) {
-                            Crittercism.logHandledException(e);
-                        }
-                        Crittercism.setMetadata(metadata);
-                    }
-                });
-                return true;
+                return executeSetMetadata(action, args, callbackContext);
             } else if (ACTION_LOG_HANDLED_EXCEPTION.equals(action)) {
-                final String name = args.getString(0);
-                final String msg = args.getString(1);
-                final String stack = args.getString(2);
-                cordova.getThreadPool().execute(new Runnable() {
-                    public void run() {
-                        Crittercism._logHandledException(name, msg, stack);
-                    }
-                });
-                return true;
+                return executeLogHandledException(action, args, callbackContext);
             } else if (ACTION_LOG_CRASH_EXCEPTION.equals(action)) {
-                final String msg = args.getString(0);
-                final String stack = args.getString(1);
-                cordova.getThreadPool().execute(new Runnable() {
-                    public void run() {
-
-                        Crittercism._logCrashException(msg, stack);
-                    }
-                });
-                return true;
+                return executeLogCrashException(action, args, callbackContext);
             } else if (ACTION_LOG_NETWORK_REQUEST.equals(action)) {
-                // I don't believe manually logging network requests is meant to be supported.
-                // It doesn't appear on the docs and should this be the case, we expect the
-                // error value to be an 'int' between 600 and 604 than a user supplied string.
-                final String method = args.getString(0);
-                final String urlStr = args.getString(1);
-                final long responseTime = args.getLong(2);
-                final long bytesRead = args.getLong(3);
-                final long bytesSent = args.getLong(4);
-                final int responseCode = args.getInt(5);
-                final int errorCode = args.getInt(6);
-
-                /*
-                String errorString = null;
-                final Exception error;
-
-                if (!args.isNull(6)) {
-                    try {
-                        final int errorInt = args.getInt(6);
-                        errorString = Integer.toString(errorInt);
-                    } catch (Throwable t) {}
-
-                    if (errorString == null) {
-                        try {
-                            String tmpErrorString = args.getString(6);
-                            // Make sure the string parses to a valid integer
-                            Integer integer = Integer.valueOf(tmpErrorString);
-                            errorString = integer.toString();
-                        } catch (JSONException ignored) {
-                        } catch (NumberFormatException ignored) { }
-                    }
-                }
-
-                if (errorString != null) {
-                    error = new CRXMLHttpRequestException(errorString);
-                } else {
-                    error = null;
-                }
-                */
-
-                cordova.getThreadPool().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        Crittercism.logNetworkRequest(method, urlStr, responseTime, bytesRead, bytesSent, responseCode, errorCode);
-                    }
-                });
-                return true;
+                return executeLogNetworkRequest(action, args, callbackContext);
             } else if (ACTION_BEGIN_TRANSACTION.equals(action)) {
-                final String transaction = args.getString(0);
-
-                cordova.getThreadPool().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        Crittercism.beginTransaction(transaction);
-                        if (args.length() >= 2) {
-                            try {
-                                final int transactionValue = args.getInt(1);
-                                Crittercism.setTransactionValue(transaction, transactionValue);
-                            } catch (JSONException e) {}
-                        }
-                    }
-                });
-                return true;
+                return executeBeginTransaction(action, args, callbackContext);
             } else if (ACTION_END_TRANSACTION.equals(action)) {
-                final String transaction = args.getString(0);
-                cordova.getThreadPool().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        Crittercism.endTransaction(transaction);
-                    }
-                });
-                return true;
+                return executeEndTransaction(action, args, callbackContext);
             } else if (ACTION_FAIL_TRANSACTION.equals(action)) {
-                final String transaction = args.getString(0);
-                cordova.getThreadPool().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        Crittercism.failTransaction(transaction);
-                    }
-                });
-                return true;
+                return executeFailTransaction(action, args, callbackContext);
             } else if (ACTION_SET_TRANSACTION_VALUE.equals(action)) {
-                final String transaction = args.getString(0);
-                final int transactionValue = args.getInt(1);
-                cordova.getThreadPool().execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        Crittercism.setTransactionValue(transaction, transactionValue);
-                    }
-                });
-                return true;
+                return executeSetTransactionValue(action, args, callbackContext);
             } else if (ACTION_GET_TRANSACTION_VALUE.equals(action)) {
-                // Executing task in foreground so that call is faster given the user may expect a synchronous response
-                final String transaction = args.getString(0);
-                final int transactionValue = Crittercism.getTransactionValue(transaction);
-                callbackContext.sendPluginResult(new PluginResult(Status.OK, transactionValue));
-                return true;
+                return executeGetTransactionValue(action, args, callbackContext);
             }
-
             return false;
         } catch (ThreadDeath td) {
             throw td;
@@ -220,5 +96,155 @@ public class CDVCrittercism extends CordovaPlugin {
             Crittercism.logHandledException(t);
             return false;
         }
+    }
+
+    private boolean executeLeaveBreadcrumb(String action, final JSONArray args,
+                               CallbackContext callbackContext) throws JSONException {
+        final String breadcrumb = args.getString(0);
+        Crittercism.leaveBreadcrumb(breadcrumb);
+        return true;
+    }
+
+    private boolean executeSetUsername(String action, final JSONArray args,
+                               CallbackContext callbackContext) throws JSONException {
+        final String username = args.getString(0);
+        cordova.getThreadPool().execute(new Runnable() {
+            public void run() {
+                Crittercism.setUsername(username);
+            }
+        });
+        return true;
+    }
+
+    private boolean executeSetMetadata(String action, final JSONArray args,
+                               CallbackContext callbackContext) throws JSONException {
+        final String key = args.getString(0);
+        final String value = args.getString(1);
+        cordova.getThreadPool().execute(new Runnable() {
+            public void run() {
+                JSONObject metadata = new JSONObject();
+                try {
+                    metadata.put(key, value);
+                } catch (JSONException e) {
+                    Crittercism.logHandledException(e);
+                }
+                Crittercism.setMetadata(metadata);
+            }
+        });
+        return true;
+    }
+
+    private boolean executeLogHandledException(String action, final JSONArray args,
+                               CallbackContext callbackContext) throws JSONException {
+        final String name = args.getString(0);
+        final String msg = args.getString(1);
+        final String stack = args.getString(2);
+        cordova.getThreadPool().execute(new Runnable() {
+            public void run() {
+                Crittercism._logHandledException(name, msg, stack);
+            }
+        });
+        return true;
+    }
+
+    private boolean executeLogCrashException(String action, final JSONArray args,
+                               CallbackContext callbackContext) throws JSONException {
+        final String msg = args.getString(0);
+        final String stack = args.getString(1);
+        cordova.getThreadPool().execute(new Runnable() {
+            public void run() {
+                Crittercism._logCrashException(msg, stack);
+            }
+        });
+        return true;
+    }
+
+    private boolean executeLogNetworkRequest(String action, final JSONArray args,
+                               CallbackContext callbackContext) throws JSONException {
+        // I don't believe manually logging network requests is meant to be supported.
+        // It doesn't appear on the docs and should this be the case, we expect the
+        // error value to be an 'int' between 600 and 604 than a user supplied string.
+        final String method = args.getString(0);
+        final String urlStr = args.getString(1);
+        final long responseTime = args.getLong(2);
+        final long bytesRead = args.getLong(3);
+        final long bytesSent = args.getLong(4);
+        final int responseCode = args.getInt(5);
+        int errorCode = 0;
+        if (!args.isNull(6)) {
+            errorCode = args.getInt(6);
+        };
+        final int finalErrorCode = errorCode; // Keep the compiler happy.
+        cordova.getThreadPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                Crittercism.logNetworkRequest(method, urlStr, responseTime, bytesRead, bytesSent, responseCode, finalErrorCode);
+            }
+        });
+        return true;
+    }
+
+    private boolean executeBeginTransaction(String action, final JSONArray args,
+                               CallbackContext callbackContext) throws JSONException {
+        final String transaction = args.getString(0);
+        cordova.getThreadPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                Crittercism.beginTransaction(transaction);
+                if (args.length() >= 2) {
+                    try {
+                        final int transactionValue = args.getInt(1);
+                        Crittercism.setTransactionValue(transaction, transactionValue);
+                    } catch (JSONException e) {}
+                }
+            }
+        });
+        return true;
+    }
+
+    private boolean executeEndTransaction(String action, final JSONArray args,
+                               CallbackContext callbackContext) throws JSONException {
+        final String transaction = args.getString(0);
+        cordova.getThreadPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                Crittercism.endTransaction(transaction);
+            }
+        });
+        return true;
+    }
+
+    private boolean executeFailTransaction(String action, final JSONArray args,
+                               CallbackContext callbackContext) throws JSONException {
+        final String transaction = args.getString(0);
+        cordova.getThreadPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                Crittercism.failTransaction(transaction);
+            }
+        });
+        return true;
+    }
+
+    private boolean executeSetTransactionValue(String action, final JSONArray args,
+                               CallbackContext callbackContext) throws JSONException {
+        final String transaction = args.getString(0);
+        final int transactionValue = args.getInt(1);
+        cordova.getThreadPool().execute(new Runnable() {
+            @Override
+            public void run() {
+                Crittercism.setTransactionValue(transaction, transactionValue);
+            }
+        });
+        return true;
+    }
+
+    private boolean executeGetTransactionValue(String action, final JSONArray args,
+                               CallbackContext callbackContext) throws JSONException {
+        // Executing task in foreground so that call is faster given the user may expect a synchronous response
+        final String transaction = args.getString(0);
+        final int transactionValue = Crittercism.getTransactionValue(transaction);
+        callbackContext.sendPluginResult(new PluginResult(Status.OK, transactionValue));
+        return true;
     }
 }
