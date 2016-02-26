@@ -57,16 +57,22 @@ public class CDVCrittercism extends CordovaPlugin {
         Context context = this.cordova.getActivity();
         packageName = context.getPackageName();
         Resources resources = context.getResources();
-        String crAppID = context.getString(resources.getIdentifier(
-                APPLICATION_ID, STRING, packageName));
-        Crittercism.initialize(context, crAppID);
+        int identifier = resources.getIdentifier(APPLICATION_ID, STRING, packageName);
+        if (identifier != 0) {
+            String crAppID = context.getString(identifier);
+            if (crAppID != null && !crAppID.isEmpty()) {
+                Crittercism.initialize(context, crAppID);
+            }
+        }
     }
 
     @Override
     public boolean execute(String action, final JSONArray args,
                            CallbackContext callbackContext) throws JSONException {
         try {
-            if (ACTION_ADD_BREADCRUMB.equals(action)) {
+            if (ACTION_INIT.equals(action)) {
+                return executeInit(action, args, callbackContext);
+            } else if (ACTION_ADD_BREADCRUMB.equals(action)) {
                 return executeLeaveBreadcrumb(action, args, callbackContext);
             } else if (ACTION_SET_USERNAME.equals(action)) {
                 return executeSetUsername(action, args, callbackContext);
@@ -98,6 +104,15 @@ public class CDVCrittercism extends CordovaPlugin {
         }
     }
 
+    private boolean executeInit(String action, final JSONArray args,
+                               CallbackContext callbackContext) throws JSONException {
+        final JSONObject argsDict = args.getJSONObject(0);
+        final String appID = argsDict.getString("androidAppID");
+        Context context = this.cordova.getActivity();
+        Crittercism.initialize(context, appID);
+        return true;
+    }
+    
     private boolean executeLeaveBreadcrumb(String action, final JSONArray args,
                                CallbackContext callbackContext) throws JSONException {
         final String breadcrumb = args.getString(0);
