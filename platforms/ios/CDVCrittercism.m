@@ -31,11 +31,6 @@ static NSString *const CRJavascriptXMLHttpRequest = @"JavascriptXMLHttpRequest";
 
 - (void)pluginInitialize
 {
-  NSString *CritterAppID = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CritterAppID"];
-  if (CritterAppID.length) {
-    NSLog(@"Initializing Crittercism for application with app id %@", CritterAppID);
-    [Crittercism enableWithAppID:CritterAppID];  
-  }
 }
 
 - (void) crittercismInit:(CDVInvokedUrlCommand *)command {

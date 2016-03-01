@@ -54,16 +54,6 @@ public class CDVCrittercism extends CordovaPlugin {
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
-        Context context = this.cordova.getActivity();
-        packageName = context.getPackageName();
-        Resources resources = context.getResources();
-        int identifier = resources.getIdentifier(APPLICATION_ID, STRING, packageName);
-        if (identifier != 0) {
-            String crAppID = context.getString(identifier);
-            if (crAppID != null && !crAppID.isEmpty()) {
-                Crittercism.initialize(context, crAppID);
-            }
-        }
     }
 
     @Override
