@@ -27,7 +27,6 @@
 
     <!-- ios -->
     <platform name="ios">
-        <preference name="IOS_APP_ID" />
         <config-file target="config.xml" parent="/*">
             <feature name="CDVCrittercism">
                 <param name="ios-package" value="CDVCrittercism" />
@@ -47,16 +46,11 @@
         <source-file src="platforms/ios/CrittercismSDK/libCrittercism_v5_4_1.a" framework="true" />
         <source-file src="platforms/ios/CrittercismSDK/dsym_upload.sh" />
 
-        <config-file target="*-Info.plist" parent="CritterAppID">
-            <string>$IOS_APP_ID</string>
-        </config-file>
-
         <framework src="SystemConfiguration.framework" />
     </platform>
 
     <!-- android -->
     <platform name="android">
-        <preference name="ANDROID_APP_ID" />
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="CDVCrittercism">
                 <param name="android-package" value="com.crittercism.plugin.CDVCrittercism" />
@@ -65,12 +59,8 @@
         </config-file>
 
         <source-file src="platforms/android/res/values/crittercism.xml" target-dir="res/values/" />
-        <config-file target="res/values/crittercism.xml" parent="/*">
-            <string name="cr_app_id">$ANDROID_APP_ID</string>
-        </config-file>
 
         <config-file target="AndroidManifest.xml" parent="/*">
-            <meta-data android:name="com.crittercism.sdk.ApplicationId" android:value="@string/cr_app_id"/>
             <!-- PhoneGap adds the INTERNET permission by itself -->
             <uses-permission android:name="android.permission.READ_LOGS"/>
             <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
