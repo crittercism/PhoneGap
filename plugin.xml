@@ -3,21 +3,21 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:rim="http://www.blackberry.com/ns/widgets"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    id="com.Crittercism.PhoneGap"
+    id="cordova-plugin-apteligent"
     version="3.1.0">
 
-    <name>Crittercism</name>
+    <name>Apteligent PhoneGap Plugin</name>
 
     <description>
-      This plugin adds Crittercism Mobile App Performance Monitoring to your application.
+      Apteligent's crash reporting and performance monitoring for iOS and Android.
     </description>
 
     <license>http://www.apache.org/licenses/LICENSE-2.0</license>
 
-    <keywords>crittercism, crash, monitor, apm, error, performance</keywords>
+    <keywords>apteligent, crittercism, crash, analytics, monitor, apm, error, performance</keywords>
 
     <engines>
-        <engine name="cordova" version=">=3.3.0" />
+        <engine name="cordova" version=">=4.0.0" />
     </engines>
 
     <!-- JavaScript interface -->
