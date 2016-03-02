@@ -1,19 +1,41 @@
 {
-  "name": "cordova-plugin-crittercism",
+  "name": "cordova-plugin-apteligent",
   "version": "3.1.0",
-  "description": "The Crittercism plugin is available for iOS and Android.",
+  "description": "Apteligent's crash reporting and performance monitoring for iOS and Android.",
+  "author": "Apteligent",
+  "license": "Apache-2.0",
+  "homepage": "http://docs.crittercism.com/development_platforms/phonegap.html",
+  "cordova": {
+    "id": "cordova-plugin-apteligent",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/crittercism/PhoneGap.git"
+    "url": "git+https://github.com/crittercism/PhoneGap.git"
   },
   "keywords": [
-    "cordova",
-    "cordova-android",
-    "cordova-ios",
     "crittercism",
-    "ecosystem:cordova"
+    "crash",
+    "analytics",
+    "monitor",
+    "apm",
+    "error",
+    "performance",
+    "ecosystem:cordova",
+    "cordova-ios",
+    "cordova-android"
   ],
-  "license": "Apache-2.0",
-  "bugs": "https://github.com/crittercism/PhoneGap/issues",
-  "homepage": "http://docs.crittercism.com/development_platforms/phonegap.html"
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=4.0.0"
+    }
+  ],
+  "bugs": {
+    "url" : "http://community.apteligent.com",
+    "email" : "support@apteligent.com"
+  }
 }
