@@ -4,7 +4,7 @@
   "description": "Apteligent's crash reporting and performance monitoring for iOS and Android.",
   "author": "Apteligent",
   "license": "Apache-2.0",
-  "homepage": "http://docs.crittercism.com/development_platforms/phonegap.html"
+  "homepage": "http://docs.crittercism.com/development_platforms/phonegap.html",
   "cordova": {
     "id": "cordova-plugin-apteligent",
     "platforms": [
@@ -37,5 +37,5 @@
   "bugs": {
     "url" : "http://community.apteligent.com",
     "email" : "support@apteligent.com"
-  },
+  }
 }
