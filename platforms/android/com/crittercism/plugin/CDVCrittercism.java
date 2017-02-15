@@ -15,6 +15,8 @@
 package com.crittercism.plugin;
 
 import java.net.URL;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
@@ -49,6 +51,7 @@ public class CDVCrittercism extends CordovaPlugin {
     public static final String APPLICATION_ID = "cr_app_id";
     public static final String STRING = "string";
 
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
     private String packageName;
 
     @Override
@@ -98,22 +101,33 @@ public class CDVCrittercism extends CordovaPlugin {
                                CallbackContext callbackContext) throws JSONException {
         final JSONObject argsDict = args.getJSONObject(0);
         final String appID = argsDict.getString("androidAppID");
-        Context context = this.cordova.getActivity();
-        Crittercism.initialize(context, appID);
+        final Context context = this.cordova.getActivity();
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                Crittercism.initialize(context, appID);
+            }
+        });
         return true;
     }
     
     private boolean executeLeaveBreadcrumb(String action, final JSONArray args,
                                CallbackContext callbackContext) throws JSONException {
         final String breadcrumb = args.getString(0);
-        Crittercism.leaveBreadcrumb(breadcrumb);
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                Crittercism.leaveBreadcrumb(breadcrumb);
+            }
+        });
         return true;
     }
 
     private boolean executeSetUsername(String action, final JSONArray args,
                                CallbackContext callbackContext) throws JSONException {
         final String username = args.getString(0);
-        cordova.getThreadPool().execute(new Runnable() {
+        executor.execute(new Runnable() {
+            @Override
             public void run() {
                 Crittercism.setUsername(username);
             }
@@ -125,7 +139,8 @@ public class CDVCrittercism extends CordovaPlugin {
                                CallbackContext callbackContext) throws JSONException {
         final String key = args.getString(0);
         final String value = args.getString(1);
-        cordova.getThreadPool().execute(new Runnable() {
+        executor.execute(new Runnable() {
+            @Override
             public void run() {
                 JSONObject metadata = new JSONObject();
                 try {
@@ -144,7 +159,8 @@ public class CDVCrittercism extends CordovaPlugin {
         final String name = args.getString(0);
         final String msg = args.getString(1);
         final String stack = args.getString(2);
-        cordova.getThreadPool().execute(new Runnable() {
+        executor.execute(new Runnable() {
+            @Override
             public void run() {
                 Crittercism._logHandledException(name, msg, stack);
             }
@@ -156,7 +172,8 @@ public class CDVCrittercism extends CordovaPlugin {
                                CallbackContext callbackContext) throws JSONException {
         final String msg = args.getString(0);
         final String stack = args.getString(1);
-        cordova.getThreadPool().execute(new Runnable() {
+        executor.execute(new Runnable() {
+            @Override
             public void run() {
                 Crittercism._logCrashException(msg, stack);
             }
@@ -180,7 +197,7 @@ public class CDVCrittercism extends CordovaPlugin {
             errorCode = args.getInt(6);
         };
         final int finalErrorCode = errorCode; // Keep the compiler happy.
-        cordova.getThreadPool().execute(new Runnable() {
+        executor.execute(new Runnable() {
             @Override
             public void run() {
                 Crittercism.logNetworkRequest(method, urlStr, responseTime, bytesRead, bytesSent, responseCode, finalErrorCode);
@@ -192,7 +209,7 @@ public class CDVCrittercism extends CordovaPlugin {
     private boolean executeBeginTransaction(String action, final JSONArray args,
                                CallbackContext callbackContext) throws JSONException {
         final String transaction = args.getString(0);
-        cordova.getThreadPool().execute(new Runnable() {
+        executor.execute(new Runnable() {
             @Override
             public void run() {
                 Crittercism.beginTransaction(transaction);
@@ -210,7 +227,7 @@ public class CDVCrittercism extends CordovaPlugin {
     private boolean executeEndTransaction(String action, final JSONArray args,
                                CallbackContext callbackContext) throws JSONException {
         final String transaction = args.getString(0);
-        cordova.getThreadPool().execute(new Runnable() {
+        executor.execute(new Runnable() {
             @Override
             public void run() {
                 Crittercism.endTransaction(transaction);
@@ -222,7 +239,7 @@ public class CDVCrittercism extends CordovaPlugin {
     private boolean executeFailTransaction(String action, final JSONArray args,
                                CallbackContext callbackContext) throws JSONException {
         final String transaction = args.getString(0);
-        cordova.getThreadPool().execute(new Runnable() {
+        executor.execute(new Runnable() {
             @Override
             public void run() {
                 Crittercism.failTransaction(transaction);
@@ -235,7 +252,7 @@ public class CDVCrittercism extends CordovaPlugin {
                                CallbackContext callbackContext) throws JSONException {
         final String transaction = args.getString(0);
         final int transactionValue = args.getInt(1);
-        cordova.getThreadPool().execute(new Runnable() {
+        executor.execute(new Runnable() {
             @Override
             public void run() {
                 Crittercism.setTransactionValue(transaction, transactionValue);
