@@ -68,7 +68,7 @@
         </config-file>
 
         <!-- copy Crittercism Lib -->
-        <source-file src="platforms/android/CrittercismSDK/crittercism_v5_8_4_sdkonly_plugin.jar" target-dir="libs/" framework="true" />
+        <source-file src="platforms/android/CrittercismSDK/crittercism_v5_8_6_sdkonly_plugin.jar" target-dir="libs/" framework="true" />
 
         <!-- cordova plugin src files -->
         <source-file src="platforms/android/com/crittercism/plugin/CDVCrittercism.java" target-dir="src/com/crittercism/plugin/" />
