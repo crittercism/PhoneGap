@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-var CRITTERCISM_VERSION = "v3.3.0";
+var CRITTERCISM_VERSION = "v3.3.1";
 
 var exec = require("cordova/exec");
 
