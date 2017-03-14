@@ -23,8 +23,10 @@ function fail () {}
 var logUnhandledExceptionAsCrash = false;
 
 var	Crittercism = {
-    init: function(appID) {
-        cordova.exec(success, fail, "CDVCrittercism", "crittercismInit", [appID]);
+    init: function(appID, mySuccess, myFail) {
+        if(!mySuccess) mySuccess = success;
+        if(!myFail) myFail = fail;        
+        cordova.exec(mySuccess, myFail, "CDVCrittercism", "crittercismInit", [appID]);
         return this;
     },
     
