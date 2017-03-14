@@ -106,7 +106,9 @@ public class CDVCrittercism extends CordovaPlugin {
             @Override
             public void run() {
                 Crittercism.initialize(context, appID);
-                callbackContext.success();
+                if (callbackContext != null) {
+                    callbackContext.success();
+                }
             }
         });
         return true;
