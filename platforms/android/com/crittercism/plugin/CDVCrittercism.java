@@ -102,10 +102,12 @@ public class CDVCrittercism extends CordovaPlugin {
         final JSONObject argsDict = args.getJSONObject(0);
         final String appID = argsDict.getString("androidAppID");
         final Context context = this.cordova.getActivity();
+        final CallbackContext myContext = callbackContext;
         executor.execute(new Runnable() {
             @Override
             public void run() {
                 Crittercism.initialize(context, appID);
+                myContext.success();
             }
         });
         return true;
