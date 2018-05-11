@@ -39,7 +39,7 @@ static NSString *const CRJavascriptXMLHttpRequest = @"JavascriptXMLHttpRequest";
      NSString* critterAppID = [argsDict objectForKey:@"iosAppID"];
      NSLog(@"Initializing Crittercism for application with app id %@", critterAppID);
      [Crittercism enableWithAppID:critterAppID];
-   }];   
+   }];
 }
 
 - (void) crittercismLeaveBreadcrumb:(CDVInvokedUrlCommand *)command {
@@ -132,10 +132,10 @@ static NSString *const CRJavascriptXMLHttpRequest = @"JavascriptXMLHttpRequest";
         NSString* transaction = command.arguments[0];
         if ([command.arguments count] >= 2) {
           NSInteger transactionValue = [command.arguments[1] integerValue];
-          [Crittercism beginTransaction:transaction
-                                withValue:(int)transactionValue];
+          [Crittercism beginUserflow:transaction
+                           withValue:(int)transactionValue];
         } else {
-          [Crittercism beginTransaction:transaction];
+          [Crittercism beginUserflow:transaction];
         }
     }];
 }
@@ -143,14 +143,14 @@ static NSString *const CRJavascriptXMLHttpRequest = @"JavascriptXMLHttpRequest";
 - (void) crittercismEndTransaction:(CDVInvokedUrlCommand *)command {
     [self.commandDelegate runInBackground:^{
         NSString* transaction = command.arguments[0];
-        [Crittercism endTransaction:transaction];
+        [Crittercism endUserflow:transaction];
     }];
 }
 
 - (void) crittercismFailTransaction:(CDVInvokedUrlCommand *)command {
     [self.commandDelegate runInBackground:^{
         NSString* transaction = command.arguments[0];
-        [Crittercism failTransaction:transaction];
+        [Crittercism failUserflow:transaction];
     }];
 }
 
@@ -159,7 +159,7 @@ static NSString *const CRJavascriptXMLHttpRequest = @"JavascriptXMLHttpRequest";
         NSString* transaction = command.arguments[0];
         NSInteger transactionValue = [command.arguments[1] integerValue];
         [Crittercism setValue:(int)transactionValue
-               forTransaction:transaction];
+                  forUserflow:transaction];
     }];
 }
 
@@ -167,7 +167,7 @@ static NSString *const CRJavascriptXMLHttpRequest = @"JavascriptXMLHttpRequest";
         // Executing task in foreground so that call is faster given the user expects a synchronous response
         CDVPluginResult* pluginResult = nil;
         NSString* transaction = command.arguments[0];
-        NSInteger transactionValue = [Crittercism valueForTransaction:transaction];
+        NSInteger transactionValue = [Crittercism valueForUserflow:transaction];
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
                                             messageAsInt:(int)transactionValue];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];

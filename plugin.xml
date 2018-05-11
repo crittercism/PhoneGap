@@ -41,9 +41,10 @@
         <header-file src="platforms/ios/CrittercismSDK/CRFilter.h" />
         <header-file src="platforms/ios/CrittercismSDK/Crittercism.h" />
         <header-file src="platforms/ios/CrittercismSDK/CrittercismConfig.h" />
+        <header-file src="platforms/ios/CrittercismSDK/CrittercismConstants.h" />
         <header-file src="platforms/ios/CrittercismSDK/CrittercismDelegate.h" />
-        <header-file src="platforms/ios/CrittercismSDK/CrittercismLoggingLevel.h" />
-        <source-file src="platforms/ios/CrittercismSDK/libCrittercism_v5_4_1.a" framework="true" />
+        <header-file src="platforms/ios/CrittercismSDK/CrittercismVersion.h" />
+        <source-file src="platforms/ios/CrittercismSDK/Crittercism" framework="true" />
         <source-file src="platforms/ios/CrittercismSDK/dsym_upload.sh" />
 
         <framework src="SystemConfiguration.framework" />
