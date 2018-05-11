@@ -8,11 +8,16 @@
 #   * Click "Build Phases" at the top of the project editor.
 #   * Click "Add Build Phase" in the lower right corner.
 #   * Choose "Add Run Script."
-#   * Paste the following script into the dark text box. You will have to 
+#   * Paste the following script into the dark text box. You will have to
 #     uncomment the lines (remove the #s) of course.
-#   * Use the generate_symbol_upload_token.sh script to obtain a OAuth Token
-#     Crittercism is encouraging conversion from old style API_KEY SCRIPT
-#     to new style OAUTH2 SCRIPT for better security.
+#   * Go to https://app.crittercism.com/developers/app-settings/<YOUR_APP_ID>
+#     to obtain an API key
+#
+# --- API_KEY SCRIPT BEGINS ON NEXT LINE, COPY AND EDIT FROM THERE ---
+# APP_ID="<YOUR_APP_ID>"
+# API_KEY="<YOUR_API_KEY>"
+# source ${SRCROOT}/CrittercismSDK/dsym_upload.sh
+# --- END OF SCRIPT ---
 #
 # --- OAUTH2 SCRIPT BEGINS ON NEXT LINE, COPY AND EDIT FROM THERE ---
 # APP_ID="<YOUR_APP_ID>"
@@ -20,11 +25,6 @@
 # source ${SRCROOT}/CrittercismSDK/dsym_upload.sh
 # --- END OF SCRIPT ---
 #
-# --- API_KEY SCRIPT BEGINS ON NEXT LINE, COPY AND EDIT FROM THERE ---
-# APP_ID="<YOUR_APP_ID>"
-# API_KEY="<YOUR_API_KEY>"
-# source ${SRCROOT}/CrittercismSDK/dsym_upload.sh
-# --- END OF SCRIPT ---
 
 ################################################################################
 # Advanced Settings
@@ -162,16 +162,6 @@ function usage() {
   echo "     -h      Help.  Print usage information."
   echo "     -v      Verbose.  Print extra script information to assist diagnosis of any issues."
   echo
-  echo "OAUTH2 EXAMPLES"
-  echo "     To upload a *.dSYM, using an interactive interface:"
-  echo "             export APP_ID=\"12e08aeabddd3f0e009c406f\""
-  echo "             export OAUTH2=\"38263980d53vf9f17xe81ffx28beef2b\""
-  echo "             sh dsym_upload.sh -v YourApp.dSYM"
-  echo "     To upload a *.dSYM, using an Xcode build phase run script:"
-  echo "             APP_ID=\"12e08aeabddd3f0e009c406f\""
-  echo "             OAUTH2=\"38263980d53vf9f17xe81ffx28beef2b\""
-  echo "             source ${SRCROOT}/CrittercismSDK/dsym_upload.sh"
-  echo ""
   echo "API_KEY EXAMPLES"
   echo "     To upload a *.dSYM, using an interactive interface:"
   echo "             export APP_ID=\"12e08aeabddd3f0e009c406f\""
@@ -180,6 +170,16 @@ function usage() {
   echo "     To upload a *.dSYM, using an Xcode build phase run script:"
   echo "             APP_ID=\"12e08aeabddd3f0e009c406f\""
   echo "             API_KEY=\"38263980d53vf9f17xe81ffx28beef2b\""
+  echo "             source ${SRCROOT}/CrittercismSDK/dsym_upload.sh"
+  echo ""
+  echo "OAUTH2 EXAMPLES"
+  echo "     To upload a *.dSYM, using an interactive interface:"
+  echo "             export APP_ID=\"12e08aeabddd3f0e009c406f\""
+  echo "             export OAUTH2=\"38263980d53vf9f17xe81ffx28beef2b\""
+  echo "             sh dsym_upload.sh -v YourApp.dSYM"
+  echo "     To upload a *.dSYM, using an Xcode build phase run script:"
+  echo "             APP_ID=\"12e08aeabddd3f0e009c406f\""
+  echo "             OAUTH2=\"38263980d53vf9f17xe81ffx28beef2b\""
   echo "             source ${SRCROOT}/CrittercismSDK/dsym_upload.sh"
 }
 
@@ -253,9 +253,12 @@ else
   # Assume running script inside Xcode IDE
   VERBOSE=true
   verbose "DWARF_DSYM_FILE_NAME is defined"
-  TMP="${TARGET_TEMP_DIR}"
-  DSYM_SRC=${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}
-  DSYM_FILE=${DWARF_DSYM_FILE_NAME}
+
+  TMP="${TARGET_TEMP_DIR}/crittercism"
+  mkdir -p "${TMP}"
+
+  DSYM_SRC="${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}"
+  DSYM_FILE="${DWARF_DSYM_FILE_NAME}"
   # Display build info
   BUNDLE_VERSION=$(/usr/libexec/PlistBuddy -c 'Print CFBundleVersion' ${INFOPLIST_FILE})
   BUNDLE_SHORT_VERSION=$(/usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' ${INFOPLIST_FILE})
@@ -311,7 +314,7 @@ elif [ $APP_ID_LENGTH -eq 40 ]; then
   if [ "${APP_ID_LOCATION}" == "${US_WEST_1_PROD_DESIGNATOR}" ]; then
     DSYM_DOMAIN="crittercism.com"
   elif [ "${APP_ID_LOCATION}" == "${EU_CENTRAL_1_PROD_DESIGNATOR}" ]; then
-    DSYM_DOMAIN="eu.crittercism.com"
+    DSYM_DOMAIN="crittercism.com"
   else
     verbose "Unexpected APP_ID_LOCATION == ${APP_ID_LOCATION}"
   fi
@@ -323,8 +326,9 @@ if [ ! "${DSYM_DOMAIN}" ]; then
   exitWithMessageAndCode "err: Invalid Crittercism App ID: ${APP_ID}" 1
 fi
 if [ ! "${OAUTH2}" ]; then
-  verbose "No OAUTH2 provided.  Assuming older API_KEY style."
-  DSYM_UPLOAD_DOMAIN="api.${DSYM_DOMAIN}"
+  # No OAUTH2 provided.  Assuming API_KEY style.
+  verbose "API key provided."
+  DSYM_UPLOAD_DOMAIN="app.${DSYM_DOMAIN}"
   verbose "dSym Upload Domain: ${DSYM_UPLOAD_DOMAIN}"
   DSYM_UPLOAD_URL="https://${DSYM_UPLOAD_DOMAIN}/api_beta/dsym/${APP_ID}"
   verbose "dSym Upload URL: ${DSYM_UPLOAD_URL}"
@@ -355,7 +359,7 @@ verbose "Uploading dSYM.zip to Crittercism: ${DSYM_UPLOAD_URL}"
 
 CR_SUCCESS=1
 if [ ! "${OAUTH2}" ]; then
-  # No OAUTH2 provided.  Assuming older API_KEY style.
+  # No OAUTH2 provided.  Assuming API_KEY style.
   STATUS=$(/usr/bin/curl "${DSYM_UPLOAD_URL}" --write-out %{http_code} --silent --output /dev/null -F dsym=@"${DSYM_ZIP_FPATH}" -F key="${API_KEY}")
   verbose "Crittercism API server response: ${STATUS}"
   if [ $STATUS -ne 200 ]; then

@@ -13,6 +13,6 @@
 @optional
 
 // Will be called if your app crashed the last time it was running.
-- (void)crittercismDidCrashOnLastLoad;
+- (void)crittercismDidCrashOnLastLoad DEPRECATED_MSG_ATTRIBUTE("Please listen to CrittercismDidCrashOnLastLoadNotification notifications, see Crittercism.h for details");
 
 @end
